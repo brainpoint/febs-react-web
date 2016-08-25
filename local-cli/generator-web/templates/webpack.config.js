@@ -16,7 +16,7 @@ let isProd = NODE_ENV === 'production';
 var config = {
   paths: {
     src: path.join(ROOT_PATH, '.'),
-    index: path.join(ROOT_PATH, 'index.ios'),
+    index: path.join(ROOT_PATH, 'index.web'),
   },
 };
 
@@ -44,7 +44,7 @@ var webpackConfig = {
   plugins: [
     new HasteResolverPlugin({
       platform: 'web',
-      nodeModules: ['react-web']
+      nodeModules: ['citong-react-web']
     }),
     new webpack.DefinePlugin({
       'process.env': {

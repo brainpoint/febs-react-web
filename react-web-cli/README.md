@@ -1,5 +1,7 @@
 # The React Web CLI tools
 
-* `react-web init <ProjectDir>`
-* `react-web start`
-* `react-web bundle`
+> from [React-web-cli@0.0.3](https://www.npmjs.com/package/react-web-cli)
+
+* `citong-react-web init <ProjectDir>`
+* `citong-react-web start`
+* `citong-react-web bundle`

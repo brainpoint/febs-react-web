@@ -60,7 +60,7 @@ function run() {
 
 function printUsage() {
   console.log([
-    'Usage: react-web <command>',
+    'Usage: citong-react-web <command>',
     '',
     'Commands:'
   ].concat(Object.keys(documentedCommands).map(function(name) {
@@ -70,12 +70,12 @@ function printUsage() {
 }
 
 // The user should never get here because projects are inited by
-// using `react-web-cli` from outside a project directory.
+// using `citong-react-web-cli` from outside a project directory.
 function printInitWarning() {
   return Promise.resolve().then(function() {
     console.log([
       'Looks like React Web project already exists in the current',
-      'folder. Run this command from a different folder or remove node_modules/react-web'
+      'folder. Run this command from a different folder or remove node_modules/citong-react-web'
     ].join('\n'));
     process.exit(1);
   });
@@ -92,7 +92,7 @@ function init(projectDir, argsOrName) {
   console.log('Setting up new React Web app in ' + projectDir);
 
   // argv is for instance
-  // ['node', 'react-web', 'init', 'AwesomeApp', '--verbose']
+  // ['node', 'citong-react-web', 'init', 'AwesomeApp', '--verbose']
   // args should be ['AwesomeApp', '--verbose']
   var args = Array.isArray(argsOrName)
     ? argsOrName

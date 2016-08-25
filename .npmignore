@@ -24,6 +24,7 @@ DerivedData
 # node.js
 #
 node_modules/
+Libraries/
 npm-debug.log
 
 # Config

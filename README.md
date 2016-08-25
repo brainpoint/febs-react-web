@@ -6,6 +6,49 @@
 
 > 部署等相关内容查阅 [React-web@0.3.2 README](./README-react-web.md)
 
+## Adding web to an existing React Native project
+
+If you already have a React Native project and want to add web support, you need to execute the following commands in your existing project directory:
+
+1. Install `npm install citong-react-web-cli -g`
+2. Execute `citong-react-web init <ExistedProjectDir>`. That install `citong-react-web` and `devDependencies` to your project and make a `web` directory with `webpack.config.js` file under your project
+3. Register your app into a web platform. To do so, add the code from **Fix platform differences. 2. Should run application on web platform** to your index.web.js file
+4. Execute `citong-react-web start` that starts the web dev server
+5. Execute `citong-react-web bundle` that builds the output
+
+## Getting Started
+
+### Install
+
+```sh
+npm install citong-react-web --save
+```
+
+### Add Webpack configuration
+
+Inside your webpack configuration, alias the `react-native` package to the `react-web` package, then install and add [haste-resolver-webpack-plugin](https://github.com/yuanyan/haste-resolver-webpack-plugin) plugin.
+
+```js
+// webpack.config.js
+var HasteResolverPlugin = require('haste-resolver-webpack-plugin');
+
+module.exports = {
+  resolve: {
+    alias: {
+      'react-native': 'citong-react-web'
+    }
+  },
+  plugins: [
+    new HasteResolverPlugin({
+      platform: 'web',
+      nodeModules: ['citong-react-web']
+    })
+  ]
+}
+```
+
+> See more detail of the `webpack.config.js` from [React Native Web Example](https://github.com/yuanyan/react-native-web-example/blob/master/web/webpack.config.js)
+
 
 ### Fix platform differences
 

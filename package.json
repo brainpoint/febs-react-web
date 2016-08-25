@@ -1,6 +1,6 @@
 {
   "name": "citong-react-web",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "description": "A framework for building web apps with React",
   "license": "BSD-3-Clause",
   "homepage": "https://github.com/brainpoint/citong-react-web#readme",
@@ -8,13 +8,15 @@
     "type": "git",
     "url": "git+ssh://git@github.com/brainpoint/citong-react-web.git"
   },
-  "main": "./Libraries/react-web.js",
+  "main": "./Libraries/citong-react-web.js",
   "keywords": [
     "react-native",
     "react-web",
     "react",
     "react-component",
-    "citong-react-web"
+    "citong-react",
+    "citong-react-web",
+    "citong-react-component"
   ],
   "scripts": {
     "test": "jest",
