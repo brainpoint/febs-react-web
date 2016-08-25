@@ -196,7 +196,7 @@ var defaultRenderError = (errorDomain, errorCode, errorDesc) => {
 
 class WebView extends React.Component {
 
-  static defaultProps = {
+  propTypes = {
       /**
        * Loads static html or a uri (with optional headers) in the WebView.
        */
@@ -378,6 +378,11 @@ class WebView extends React.Component {
       startInLoadingState: true,
   }
 
+  defaultProps = {
+    javaScriptEnabled : true,
+    scalesPageToFit: true,
+  }
+
   getInnerViewNode() {
     return this.refs[WEBVIEW_REF].childNodes[0];
   }
@@ -453,7 +458,7 @@ class WebView extends React.Component {
       childrens = otherView;
     } else {
       childrens = (
-        <View ref={VIEWPAGER_REF}>
+        <View ref={WEBVIEW_REF}>
           style={webViewStyles}
           dangerouslySetInnerHTML={{__html: this._html}}
         </View>
@@ -533,6 +538,8 @@ class WebView extends React.Component {
         res.text().then(data=>{
           this._html = data;
           this._onLoadingFinish();
+        }).catch(err=>{
+          this._onLoadingError({domain:source.uri, description:err});  
         });
       }).catch(err=>{
         // err.domain = source.uri;
