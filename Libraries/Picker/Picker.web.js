@@ -85,7 +85,7 @@ class Picker extends Component {
       return (
         <TouchableWithoutFeedback onPress={()=>this.refs[PICKER].click()}>
         <View style={this.props.style}>
-          <Text style={{position:'absolule',top:0,left:0,right:0,bottom:0}}>{label}</Text>
+          <Text style={{position:'absolute',top:0,left:0,right:0,bottom:0}}>{label}</Text>
           <select
             ref={PICKER}
             value={this.props.selectedValue}
