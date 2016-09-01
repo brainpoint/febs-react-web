@@ -148,6 +148,8 @@ module.exports = {
 * WebView - ReactWebView
     对于跨站访问需对应服务器添加 meta http-equiv="Access-Control-Allow-Origin" content="*"; 或者添加至headers中
     goBack/等函数无效.
+# Picker - ReactPicker
+    增加一个isRenderSelect:bool属性, 表明是否渲染向下箭头.
 
 #### New APIs features
 * Platform - ReactPlatform

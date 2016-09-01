@@ -122,13 +122,16 @@ if (NODE_ENV === 'production') {
       new webpack.optimize.CommonsChunkPlugin('citong-react-web', 'citong-react-web.js'),
     ],
     module: {
-      loaders: [{
-        test: /\.jsx?$/,
-        loader: 'babel', // 'babel-loader' is also a legal name to reference
-        query: {
-          presets: ['es2015', 'react', 'stage-1']
-        },
-        include: [config.paths.src],
+      loaders: [
+        { test: /\.css$/, loader: 'style-loader!css-loader' },
+        { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+        {
+          test: /\.jsx?$/,
+          loader: 'babel', // 'babel-loader' is also a legal name to reference
+          query: {
+            presets: ['es2015', 'react', 'stage-1']
+          },
+          include: [config.paths.src],
       }]
     }
   });
