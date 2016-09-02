@@ -14,3 +14,7 @@
 0.0.14
 ==================
   - Picker: 添加isRenderSelect属性, 用于指明是否显示下拉图标
+
+0.0.15
+==================
+  - export Fetch use jsonp.

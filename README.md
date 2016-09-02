@@ -78,12 +78,13 @@ module.exports = {
 
 #### 3. Should care about fetch domain on web platform
   ```js
-  var Fetch = Platform.OS === 'web'? require('ReactJsonp'): fetch; 
-    or
-  var Fetch = Platform.OS === 'web'? require('ReactJsonp'): require('ReactFetch');
+  import {
+    Fetch,
+    Jsonp
+  } from 'react-native'
   ```
-  ReactJsonp 只支持jsonp格式: callback({json}), 且只能是get方式.
-  ReactFetch 使用XMLHttpRequest, 需处理跨域问题.
+  Jsonp 只支持jsonp格式: callback({json}), 且只能是get方式.
+  Fetch 使用XMLHttpRequest, 需处理跨域问题.
 
 #### 4. Without some APIs like `LayoutAnimation` on web platform
   ```js
@@ -148,7 +149,7 @@ module.exports = {
 * WebView - ReactWebView
     对于跨站访问需对应服务器添加 meta http-equiv="Access-Control-Allow-Origin" content="*"; 或者添加至headers中
     goBack/等函数无效.
-# Picker - ReactPicker
+* Picker - ReactPicker
     增加一个isRenderSelect:bool属性, 表明是否渲染向下箭头.
 
 #### New APIs features
