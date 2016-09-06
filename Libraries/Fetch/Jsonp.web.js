@@ -36,7 +36,7 @@ function removeScript(scriptId) {
 
 const fetchJsonp = function(url, options = {}) {
   const timeout = options.timeout != null ? options.timeout : defaultOptions.timeout;
-  const jsonpCallback = options.jsonpCallback != null ? options.jsonpCallback : defaultOptions.jsonpCallback;
+  const jsonpCallback = (!!options.jsonpCallback) ? options.jsonpCallback : defaultOptions.jsonpCallback;
 
   let timeoutId;
 
