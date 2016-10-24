@@ -17,7 +17,7 @@ var config = {
 var mergeCommon = merge.bind(null, {
   resolve: {
     alias: {
-      'react-native': 'citong-react-web',
+      'react-native': 'ReactWeb',
       'ReactART': 'react-art'
     },
     extensions: ['', '.js', '.jsx', '.md', '.css', '.png', '.jpg'],

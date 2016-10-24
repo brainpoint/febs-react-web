@@ -26,7 +26,7 @@ var webpackConfig = {
   devtool: 'cheap-module-eval-source-map',
   resolve: {
     alias: {
-      'react-native': 'citong-react-web',
+      'react-native': 'ReactWeb',
     },
     extensions: ['', '.js', '.ios.js', '.android.js', '.jsx'],
   },
