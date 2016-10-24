@@ -13,20 +13,7 @@ import View from 'ReactView';
 import Text from 'ReactText';
 import TouchableWithoutFeedback from 'ReactTouchableWithoutFeedback';
 
-// var Styles = require('./Picker.css');
-
 const PICKER = 'picker';
-
-// const Styles = StyleSheet.create({
-//     "picker": {
-//         "appearance": "none",
-//         "MozAppearance": "none",
-//         "WebkitAppearance": "none"
-//     },
-//     "picker::-ms-expand": {
-//         "display": "none"
-//     }
-// });
 
 class Picker extends Component {
   static propTypes = {
@@ -38,7 +25,6 @@ class Picker extends Component {
   static defaultProps = {
     isRenderSelect: false
   }
-
   _onChange(event) {
     // shim the native event
     event.nativeEvent.newValue = this.refs[PICKER].value;

@@ -40,7 +40,7 @@
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
-var spawn = require('child_process').spawn;
+var spawn = require('cross-spawn');
 var chalk = require('chalk');
 var prompt = require('prompt');
 var semver = require('semver');
@@ -135,17 +135,17 @@ function validatePackageName(name) {
   }
 }
 
-function init(name, verbose, rnPackage) {
+function init(name, verbose, rwPackage) {
   validatePackageName(name);
 
   if (fs.existsSync(name)) {
-    createAfterConfirmation(name, verbose, rnPackage);
+    createAfterConfirmation(name, verbose, rwPackage);
   } else {
-    createProject(name, verbose, rnPackage);
+    createProject(name, verbose, rwPackage);
   }
 }
 
-function createAfterConfirmation(name, verbose, rnPackage) {
+function createAfterConfirmation(name, verbose, rwPackage) {
   prompt.start();
 
   var property = {
@@ -158,7 +158,7 @@ function createAfterConfirmation(name, verbose, rnPackage) {
 
   prompt.get(property, function (err, result) {
     if (result.yesno[0] === 'y') {
-      createProject(name, verbose, rnPackage);
+      createProject(name, verbose, rwPackage);
     } else {
       console.log('Project initialization canceled');
       process.exit();
@@ -166,7 +166,7 @@ function createAfterConfirmation(name, verbose, rnPackage) {
   });
 }
 
-function createProject(name, verbose, rnPackage) {
+function createProject(name, verbose, rwPackage) {
   var root = path.resolve(name);
   var projectName = path.basename(root);
 
@@ -195,9 +195,9 @@ function createProject(name, verbose, rnPackage) {
   console.log('Installing citong-react-web package from npm...');
 
   if (verbose) {
-    runVerbose(root, projectName, rnPackage);
+    runVerbose(root, projectName, rwPackage);
   } else {
-    run(root, projectName, rnPackage);
+    run(root, projectName, rwPackage);
   }
 }
 
@@ -241,7 +241,7 @@ function runVerbose(root, projectName, rwPackage) {
 }
 
 function checkForVersionArgument() {
-  if (process.argv.indexOf('-v') >= 0 || process.argv.indexOf('--version') >= 0) {
+  if (argv._.length === 0 && (argv.v || argv.version)) {
     console.log('citong-react-web-cli: ' + require('./package.json').version);
     try {
       console.log('citong-react-web: ' + require(REACT_WEB_PACKAGE_JSON_PATH()).version);

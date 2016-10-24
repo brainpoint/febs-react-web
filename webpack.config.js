@@ -24,14 +24,6 @@ var mergeCommon = merge.bind(null, {
   },
   module: {
     loaders: [{
-      test: /\.png$/,
-      loader: 'url?limit=100000&mimetype=image/png',
-      include: config.paths.demo,
-    }, {
-      test: /\.jpg$/,
-      loader: 'file',
-      include: config.paths.demo,
-    }, {
       test: /\.json$/,
       loader: 'json',
     }, ]
@@ -85,7 +77,7 @@ if (NODE_ENV === 'development') {
         test: /\.jsx?$/,
         loader: 'babel', // 'babel-loader' is also a legal name to reference
         query: {
-          presets: ['es2015', 'react', 'stage-1']
+          presets: ['react-native', 'stage-1']
         },
         include: [config.paths.src],
       }]
@@ -119,19 +111,16 @@ if (NODE_ENV === 'production') {
           warnings: false
         },
       }),
-      new webpack.optimize.CommonsChunkPlugin('citong-react-web', 'citong-react-web.js'),
+      new webpack.optimize.CommonsChunkPlugin('citong-react-web', 'react-web.js'),
     ],
     module: {
-      loaders: [
-        { test: /\.css$/, loader: 'style-loader!css-loader' },
-        { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
-        {
-          test: /\.jsx?$/,
-          loader: 'babel', // 'babel-loader' is also a legal name to reference
-          query: {
-            presets: ['react-native', 'stage-1']
-          },
-          include: [config.paths.src],
+      loaders: [{
+        test: /\.jsx?$/,
+        loader: 'babel', // 'babel-loader' is also a legal name to reference
+        query: {
+          presets: ['react-native', 'stage-1']
+        },
+        include: [config.paths.src],
       }]
     }
   });

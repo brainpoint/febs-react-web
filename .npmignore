@@ -23,8 +23,6 @@ DerivedData
 
 # node.js
 #
-node_modules/
-Libraries/
 npm-debug.log
 
 # Config
@@ -41,5 +39,5 @@ npm-debug.log
 # Project
 #
 pages
-react-web-cli
+citong-react-web-cli
 Examples

@@ -22,6 +22,7 @@ export ActivityIndicator from 'ReactActivityIndicator';
 export DrawerLayoutAndroid from 'ReactDrawerLayout';
 export Image from 'ReactImage';
 export ListView from 'ReactListView';
+export Linking from 'ReactLinking';
 export Modal from 'ReactModal';
 export Navigator from 'ReactNavigator';
 export PickerIOS from 'ReactPicker';
@@ -31,6 +32,7 @@ export ScrollView from 'ReactScrollView';
 export SegmentedControlIOS from 'ReactSegmentedControl';
 export SliderIOS from 'ReactSlider';
 export Switch from 'ReactSwitch';
+export StatusBar from 'ReactStatusBar';
 export SwitchAndroid from 'ReactSwitch';
 export SwitchIOS from 'ReactSwitch';
 export TabBarIOS from 'ReactTabBar';
@@ -63,8 +65,6 @@ export LayoutAnimation from 'ReactLayoutAnimation';
 export PanResponder from 'ReactPanResponder';
 export PixelRatio from 'ReactPixelRatio';
 export StyleSheet from 'ReactStyleSheet';
-export Jsonp      from 'ReactJsonp';
-export Fetch      from 'ReactFetch';
 
 // Plugins
 export NativeModules from 'ReactNativeModules';

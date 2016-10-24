@@ -9,9 +9,9 @@
 
 const Platform = {
   OS: 'web',
-  select: function(m) {
-    return m.web;
-  }
+  select:(platform) => {
+    return platform.web || platform.ios;
+  },
 };
 
 module.exports = Platform;

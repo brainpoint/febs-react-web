@@ -5,7 +5,6 @@
 > 在 [React-web@0.3.2](http://github.com/taobaofed/react-web) 的基础上编写.
 
 > 部署等相关内容查阅 [React-web@0.3.2 README](./README-react-web.md)
-
 ## Adding web to an existing React Native project
 
 If you already have a React Native project and want to add web support, you need to execute the following commands in your existing project directory:
@@ -49,10 +48,59 @@ module.exports = {
 
 > See more detail of the `webpack.config.js` from [React Native Web Example](https://github.com/yuanyan/react-native-web-example/blob/master/web/webpack.config.js)
 
+#### What does HasteResolverPlugin do?
+
+When using components of `react-web`, just `require('ReactActivityIndicator')`, and Webpack will build a bundle with `ActivityIndicator.web.js` for web platform.
+
+`HasteResolverPlugin` will do the following for you:
+
+1. Walk over all components and check out the `@providesModule` info.
+2. When webpack build bundle, it makes your components recognised rather than throwing an error.
+3. It will help webpack build bundle with correct file depending on the tar* platform.
+
+You can find something like `@providesModule ReactActivityIndicator` on `react-web` component's comment, yes, it's for `HasteResolverPlugin`.
+
+### Require modules
+
+#### The CommonJS way
+
+```js
+var React = require('react-native');
+var {
+  AppRegistry,
+  StyleSheet,
+  View,
+  Platform,
+} = React;
+```
+
+This reference method looks like we're in the way of using the native react-native way:
+
+Like the require module in Node.js, and through [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), allows some components to be referenced in the scope of the current file.
+
+But in fact it is quite different in React Web.
+When `require('react-native')`, in the construction of the webpack will be renamed, equivalent to `require('react-web')`.
+
+At the same time, this form of writing will put all the components into at one time, including `ReactAppRegistry` `ReactView` and so on, even some components the you did not use.
+
+#### The Haste way
+
+```js
+var AppRegistry = require('ReactAppRegistry');
+var View = require('ReactView');
+var Text = require('ReactText');
+var Platform = require('ReactPlatform');
+```
+
+In this way, we load our components on demand, such as `ReactAppRegistry` or `ReactView` and so on.
+
+Packaged components so that we no longer need to care about the differences between the platform.
+
+As mentioned above, the HasteResolverPlugin plugin will help webpack to compile and package the code.
 
 ### Fix platform differences
 
-#### 1. Native events without direct pageX/pageY on web platform
+1. Native events without direct pageX/pageY on web platform
   ```js
   if (Platform.OS == 'web') {
     var touch = event.nativeEvent.changedTouches[0];
@@ -64,7 +112,7 @@ module.exports = {
   }
   ```
 
-#### 2. Should run application on web platform
+2. Should run application on web platform
   ```js
   AppRegistry.registerComponent('Game2048', () => Game2048);
   if(Platform.OS == 'web'){
@@ -76,7 +124,7 @@ module.exports = {
   }
   ```
 
-#### 3. Should care about fetch domain on web platform
+3. Should care about fetch domain on web platform
   ```js
   import {
     Fetch,
@@ -86,7 +134,8 @@ module.exports = {
   Jsonp 只支持jsonp格式: callback({json}), 且只能是get方式.
   Fetch 使用XMLHttpRequest, 需处理跨域问题.
 
-#### 4. Without some APIs like `LayoutAnimation` on web platform
+
+4. Without some APIs like `LayoutAnimation` on web platform
   ```js
   var LayoutAnimation = require('ReactLayoutAnimation')
   if(Platform.OS !== 'web'){
@@ -94,7 +143,7 @@ module.exports = {
   }
   ```
 
-#### 5. Should manually specify the height of ScrollView
+5. Should manually specify the height of ScrollView
   ```js
   <ScrollView style={{height: 235}} horizontal={true} />
   ```
@@ -102,7 +151,9 @@ module.exports = {
 ### React Native compatible
 
 #### Components
+
 * ActivityIndicatorIOS - ReactActivityIndicator
+* ActivityIndicator - ReactActivityIndicator
 * DatePickerIOS - ReactDatePicker *TODO*
 * DrawerLayoutAndroid - ReactDrawerLayout
 * Image - ReactImage
@@ -117,6 +168,7 @@ module.exports = {
 * Switch - ReactSwitch
 * SwitchAndroid - ReactSwitch
 * SwitchIOS - ReactSwitch
+* RefreshControl - ReactRefreshControl
 * TabBarIOS - ReactTabBar
 * Text - ReactText
 * TextInput - ReactTextInput
@@ -129,6 +181,7 @@ module.exports = {
 * ViewPagerAndroid - ReactViewPager
 
 #### APIs
+
 * Alert - ReactAlert
 * AlertIOS - ReactAlert
 * Animated - ReactAnimated
@@ -137,10 +190,27 @@ module.exports = {
 * Dimensions - ReactDimensions
 * Easing - ReactEasing
 * InteractionManager - ReactInteractionManager
+* LayoutAnimation - ReactLayoutAnimation
 * PanResponder - ReactPanResponder
 * PixelRatio - ReactPixelRatio
 * StyleSheet - ReactStyleSheet
 
+#### Plugins
+
+* NativeModules - ReactNativeModules
+* Platform - ReactPlatform
+* processColor - ReactProcessColor
+
+## Scripts
+
+* Linting - **npm run lint** - Must run it before commit.
+* Testing - **npm test** - Run unit testing by jest.
+* Developing - **npm start** - This will run a server at *localhost:3000* and use Hot Module Reloading.
+* Demo deployment - **npm run demo** - Generate demo assets under *pages* directory.
+
+## License
+
+React Web is [BSD licensed](./LICENSE).
 
 #### New Components features
 * ActivityIndicator - ReactActivityIndicator
@@ -150,7 +220,7 @@ module.exports = {
     对于跨站访问需对应服务器添加 meta http-equiv="Access-Control-Allow-Origin" content="*"; 或者添加至headers中
     goBack/等函数无效.
 * Picker - ReactPicker
-    增加一个isRenderSelect:bool属性, 表明是否渲染向下箭头.
+    增加一个isRenderSelect:bool属性, 表明是否按照web select方式渲染.
 
 #### New APIs features
 * Platform - ReactPlatform

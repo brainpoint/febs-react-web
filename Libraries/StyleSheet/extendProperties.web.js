@@ -68,8 +68,12 @@ else if ('webkitAlignSelf' in builtinStyle) flexboxSpec = 'finalVendor';
 else flexboxSpec = '2009';
 
 // FIXME: UCBrowser is cheat
-var isUCBrowser = /UCBrowser/i.test(navigator.userAgent);
+const isUCBrowser = /UCBrowser/i.test(navigator.userAgent);
 if (isUCBrowser) flexboxSpec = '2009';
+
+const isIE = /Trident/i.test(navigator.userAgent);
+const FLEX_AUTO = '1 1 auto';
+const FLEX_INITIAL = '0 1 auto';
 
 // TODO: cache the result
 function prefixOldFlexbox(property, value, result) {
@@ -102,6 +106,25 @@ function prefixOldFlexbox(property, value, result) {
     return result[property] = value;
 
   }
+}
+
+function defaultFlexExpansion (style, result) {
+  const grow = style.flex || 0;
+  const shrink = style.flexShrink || 1;
+  const basis = style.flexBasis || 'auto';
+  let flex;
+  
+  if (grow === 'auto') {
+    flex = FLEX_AUTO;
+  } else if (grow === 'initial') {
+    flex = FLEX_INITIAL;
+  } else if (isNaN(grow)) {
+    flex = grow;
+  } else {
+    flex = `${grow} ${shrink} ${basis}`;
+  }
+
+  result.flex = flex;
 }
 
 function extendBoxProperties(property, value, result) {
@@ -182,6 +205,10 @@ function extendProperties(style) {
       extendBoxProperties(property, value, result);
     } else if (flexboxProperties[property]) {
       prefixOldFlexbox(property, value, result);
+      // https://roland.codes/blog/ie-flex-collapse-bug/
+      if (property === 'flex' && isIE) {
+        defaultFlexExpansion(style, result);
+      }
     } else {
       value = processValueForProp(value, property);
       property = getVendorPropertyName(property);
