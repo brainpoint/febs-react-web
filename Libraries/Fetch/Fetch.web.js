@@ -332,6 +332,10 @@ if (!self.fetch) {
 
       var xhr = new XMLHttpRequest()
 
+      if (init && init.timeout) {
+        xhr.timeout = init.timeout;
+      }
+
       function responseURL() {
         if ('responseURL' in xhr) {
           return xhr.responseURL
@@ -361,6 +365,9 @@ if (!self.fetch) {
         resolve(new Response(body, options))
       }
 
+      xhr.ontimeout = function() {
+        reject(new TypeError('Network request timeouted'))
+      }
       xhr.onerror = function() {
         reject(new TypeError('Network request failed'))
       }

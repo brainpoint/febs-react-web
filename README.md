@@ -221,6 +221,8 @@ React Web is [BSD licensed](./LICENSE).
     goBack/等函数无效.
 * Picker - ReactPicker
     增加一个isRenderSelect:bool属性, 表明是否按照web select方式渲染.
+* Fetch - ReactFetch
+    增加timeout选项.
 
 #### New APIs features
 * Platform - ReactPlatform
