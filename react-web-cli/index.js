@@ -15,21 +15,21 @@
 // /!\ DO NOT MODIFY THIS FILE /!\
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// citong-react-web-cli is installed globally on people's computers. This means
+// react-web-cli is installed globally on people's computers. This means
 // that it is extremely difficult to have them upgrade the version and
 // because there's only one global version installed, it is very prone to
 // breaking changes.
 //
-// The only job of citong-react-web-cli is to init the repository and then
-// forward all the commands to the local version of citong-react-web.
+// The only job of react-web-cli is to init the repository and then
+// forward all the commands to the local version of react-web.
 //
 // If you need to add a new command, please add it to local-cli/.
 //
 // The only reason to modify this file is to add more warnings and
-// troubleshooting information for the `citong-react-web init` command.
+// troubleshooting information for the `react-web init` command.
 //
 // Do not make breaking changes! We absolutely don't want to have to
-// tell people to update their global version of citong-react-web-cli.
+// tell people to update their global version of react-web-cli.
 //
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // /!\ DO NOT MODIFY THIS FILE /!\
@@ -46,11 +46,11 @@ var prompt = require('prompt');
 var semver = require('semver');
 /**
  * Used arguments:
- *   -v --version - to print current version of citong-react-web-cli and citong-react-web dependency
+ *   -v --version - to print current version of react-web-cli and react-web dependency
  *   if you are in a RW app folder
  * init - to create a new project and npm install it
  *   --verbose - to print logs while init
- *   --version <alternative citong-react-web package> - override default (https://registry.npmjs.org/citong-react-web@latest),
+ *   --version <alternative react-web package> - override default (https://registry.npmjs.org/react-web@latest),
  *      package to install
  */
 var argv = require('minimist')(process.argv.slice(2));
@@ -59,7 +59,7 @@ var CLI_MODULE_PATH = function() {
   return path.resolve(
     process.cwd(),
     'node_modules',
-    'citong-react-web',
+    'react-web',
     'cli.js'
   );
 };
@@ -68,7 +68,7 @@ var REACT_WEB_PACKAGE_JSON_PATH = function() {
   return path.resolve(
     process.cwd(),
     'node_modules',
-    'citong-react-web',
+    'react-web',
     'package.json'
   );
 };
@@ -88,7 +88,7 @@ if (cli) {
 } else {
   if (commands.length === 0) {
     console.error(
-      'You did not pass any commands, did you mean to run `citong-react-web init`?'
+      'You did not pass any commands, did you mean to run `react-web init`?'
     );
     process.exit(1);
   }
@@ -97,7 +97,7 @@ if (cli) {
   case 'init':
     if (!commands[1]) {
       console.error(
-        'Usage: citong-react-web init <ProjectName> [--verbose]'
+        'Usage: react-web init <ProjectName> [--verbose]'
       );
       process.exit(1);
     } else {
@@ -107,7 +107,7 @@ if (cli) {
   default:
     console.error(
       'Command `%s` unrecognized. ' +
-      'Make sure that you have run `npm install` and that you are inside a citong-react-web project.',
+      'Make sure that you have run `npm install` and that you are inside a react-web project.',
       commands[0]
     );
     process.exit(1);
@@ -192,7 +192,7 @@ function createProject(name, verbose, rwPackage) {
 
   process.chdir(root);
 
-  console.log('Installing citong-react-web package from npm...');
+  console.log('Installing react-web package from npm...');
 
   if (verbose) {
     runVerbose(root, projectName, rwPackage);
@@ -202,7 +202,7 @@ function createProject(name, verbose, rwPackage) {
 }
 
 function getInstallPackage(rwPackage) {
-  var packageToInstall = 'citong-react-web';
+  var packageToInstall = 'react-web';
   var valideSemver = semver.valid(rwPackage);
   if (valideSemver) {
     packageToInstall += '@' + valideSemver;
@@ -218,7 +218,7 @@ function run(root, projectName, rwPackage) {
     if (e) {
       console.log(stdout);
       console.error(stderr);
-      console.error('`npm install --save --save-exact citong-react-web` failed');
+      console.error('`npm install --save --save-exact react-web` failed');
       process.exit(1);
     }
 
@@ -231,7 +231,7 @@ function runVerbose(root, projectName, rwPackage) {
   var proc = spawn('npm', ['install', '--verbose', '--save', '--save-exact', getInstallPackage(rwPackage)], {stdio: 'inherit'});
   proc.on('close', function (code) {
     if (code !== 0) {
-      console.error('`npm install --save --save-exact citong-react-web` failed');
+      console.error('`npm install --save --save-exact react-web` failed');
       return;
     }
 
@@ -242,11 +242,11 @@ function runVerbose(root, projectName, rwPackage) {
 
 function checkForVersionArgument() {
   if (argv._.length === 0 && (argv.v || argv.version)) {
-    console.log('citong-react-web-cli: ' + require('./package.json').version);
+    console.log('react-web-cli: ' + require('./package.json').version);
     try {
-      console.log('citong-react-web: ' + require(REACT_WEB_PACKAGE_JSON_PATH()).version);
+      console.log('react-web: ' + require(REACT_WEB_PACKAGE_JSON_PATH()).version);
     } catch (e) {
-      console.log('citong-react-web: n/a - not inside a React Web project directory')
+      console.log('react-web: n/a - not inside a React Web project directory')
     }
     process.exit();
   }

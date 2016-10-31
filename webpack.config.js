@@ -91,7 +91,7 @@ if (NODE_ENV === 'production') {
     devtool: 'source-map',
     entry: {
       // tweak this to include your externs unless you load them some other way
-      'citong-react-web': ['react-native'],
+      'react-web': ['react-native'],
     },
     output: {
       path: './pages',
@@ -111,7 +111,7 @@ if (NODE_ENV === 'production') {
           warnings: false
         },
       }),
-      new webpack.optimize.CommonsChunkPlugin('citong-react-web', 'react-web.js'),
+      new webpack.optimize.CommonsChunkPlugin('react-web', 'react-web.js'),
     ],
     module: {
       loaders: [{

@@ -44,7 +44,7 @@ var webpackConfig = {
   plugins: [
     new HasteResolverPlugin({
       platform: 'web',
-      nodeModules: ['citong-react-web']
+      nodeModules: ['react-web']
     }),
     new webpack.DefinePlugin({
       'process.env': {
