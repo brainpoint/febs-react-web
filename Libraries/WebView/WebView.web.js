@@ -8,18 +8,11 @@
 'use strict';
 
 import React, { PropTypes, cloneElement } from 'react';
-import assign from 'object-assign';
 import View from 'ReactView';
 import Text from 'ReactText';
 import ActivityIndicator from 'ReactActivityIndicator';
-import Animated from 'ReactAnimated';
 import StyleSheet from 'ReactStyleSheet';
 import Dimensions from 'ReactDimensions';
-import PanResponder from 'ReactPanResponder';
-import dismissKeyboard from 'ReactDismissKeyboard';
-import { Mixin as NativeMethodsMixin } from 'NativeMethodsMixin';
-import mixin from 'react-mixin';
-import autobind from 'autobind-decorator';
 import fetch from 'ReactFetch';
 
 

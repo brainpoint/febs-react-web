@@ -213,17 +213,19 @@ As mentioned above, the HasteResolverPlugin plugin will help webpack to compile 
 React Web is [BSD licensed](./LICENSE).
 
 #### New Components features
-* ActivityIndicator - ReactActivityIndicator
-* ViewPagerAndroid - ReactViewPager
+* ActivityIndicator
+* ViewPagerAndroid
     - add method: setPageWithoutAnimation
-* WebView - ReactWebView
-    对于跨站访问需对应服务器添加 meta http-equiv="Access-Control-Allow-Origin" content="*"; 或者添加至headers中
-    goBack/等函数无效.
-* Picker - ReactPicker
-    增加一个isRenderSelect:bool属性, 表明是否按照web select方式渲染.
-* Fetch - ReactFetch
-    增加timeout选项.
+* WebView
+    - 对于跨站访问需对应服务器添加 meta http-equiv="Access-Control-Allow-Origin" content="*"; 或者添加至headers中
+    - goBack/等函数无效.
+* Picker
+    - 增加一个isRenderSelect:bool属性, 表明是否按照web select方式渲染.
+* Fetch
+    - 增加timeout选项.
+* Navigator
+    - 增加 pushRouteToFront(route, cb) 方法, 允许添加一个route到顶层, 且不刷新页面, 添加完成后调用cb()
 
 #### New APIs features
-* Platform - ReactPlatform
+* Platform
     - add method: select

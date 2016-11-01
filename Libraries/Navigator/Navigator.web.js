@@ -26,9 +26,9 @@ import clamp from './polyfills/clamp';
 import flattenStyle from 'ReactFlattenStyle';
 import invariant from 'fbjs/lib/invariant';
 import rebound from 'rebound';
-import createHistory from 'history/lib/createHashHistory';
+//import createHistory from 'history/lib/createHashHistory';
 
-let history = createHistory();
+//let history = createHistory();
 let _unlisten;
 
 // TODO: this is not ideal because there is no guarantee that the navigator
@@ -325,17 +325,17 @@ let Navigator = React.createClass({
 
     // NOTE: Listen for changes to the current location. The
     // listener is called once immediately.
-    _unlisten = history.listen(function(location) {
-      let destIndex = 0;
-      if (location.pathname.indexOf('/scene_') != -1) {
-        destIndex = parseInt(location.pathname.replace('/scene_', ''));
-      }
-      if (destIndex < this.state.routeStack.length && destIndex != this.state.routeStack.length) {
-        this.hashChanged = true;
-        this._jumpN(destIndex - this.state.presentedIndex);
-        this.hashChanged = false;
-      }
-    }.bind(this));
+    // _unlisten = history.listen(function(location) {
+    //   let destIndex = 0;
+    //   if (location.pathname.indexOf('/scene_') != -1) {
+    //     destIndex = parseInt(location.pathname.replace('/scene_', ''));
+    //   }
+    //   if (destIndex < this.state.routeStack.length && destIndex != this.state.routeStack.length) {
+    //     this.hashChanged = true;
+    //     this._jumpN(destIndex - this.state.presentedIndex);
+    //     this.hashChanged = false;
+    //   }
+    // }.bind(this));
   },
 
   componentWillUnmount: function() {
@@ -871,11 +871,11 @@ let Navigator = React.createClass({
     this._emitWillFocus(this.state.routeStack[destIndex]);
     this._transitionTo(destIndex);
     if (!this.hashChanged) {
-      if (n > 0) {
-        history.pushState({ index: destIndex }, '/scene_' + getRouteID(this.state.routeStack[destIndex]));
-      } else {
-        history.go(n);
-      }
+      // if (n > 0) {
+      //   history.pushState({ index: destIndex }, '/scene_' + getRouteID(this.state.routeStack[destIndex]));
+      // } else {
+      //   history.go(n);
+      // }
       return;
     }
     if (n < 0) {
@@ -916,10 +916,30 @@ let Navigator = React.createClass({
       routeStack: nextStack,
       sceneConfigStack: nextAnimationConfigStack,
     }, () => {
-      history.pushState({ index: destIndex }, '/scene_' + getRouteID(route));
+      //history.pushState({ index: destIndex }, '/scene_' + getRouteID(route));
       this._enableScene(destIndex);
       this._transitionTo(destIndex);
     });
+  },
+
+  pushRouteToFront: function(route, cb) {
+    invariant(!!route, 'Must supply route to push');
+    let activeLength = this.state.presentedIndex + 1;
+    let activeStack = this.state.routeStack.slice(0, activeLength);
+    let activeAnimationConfigStack = this.state.sceneConfigStack.slice(0, activeLength);
+    let nextStack = [route].concat(activeStack);
+    let nextAnimationConfigStack = [
+                                      this.props.configureScene(route),
+                                    ].concat(activeAnimationConfigStack);
+    this.setState(
+      {
+        routeStack: nextStack,
+        sceneConfigStack: nextAnimationConfigStack,
+        presentedIndex: activeLength,
+        activeGesture: null,
+        transitionFromIndex: null,
+        transitionQueue: [],
+      }, ()=>cb&&cb());
   },
 
   _popN: function(n) {
@@ -938,7 +958,7 @@ let Navigator = React.createClass({
       null, // default velocity
       null, // no spring jumping
       () => {
-        history.go(-n);
+        //history.go(-n);
         this._cleanScenesPastIndex(popIndex);
       }
     );
@@ -954,7 +974,7 @@ let Navigator = React.createClass({
       //  moment.
       return;
     }
-
+    
     if (this.state.presentedIndex > 0) {
       this._popN(1);
     }
