@@ -15,7 +15,7 @@ var path = require('path');
 var citong = require('citong');
 
 function getRoot() {
-  if (__dirname.match(/node_modules[\/\\]citong-react-web[\/\\]scripts$/)) {
+  if (__dirname.match(/citong-react-web[\/\\]scripts$/)) {
     // CLI is running from node_modules.
     // This is the default case for all projects created using 'citong-react-web init'.
     return path.resolve(__dirname, '../');
