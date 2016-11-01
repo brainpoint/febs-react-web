@@ -457,12 +457,14 @@ class WebView extends React.Component {
     if (otherView) {
       childrens = otherView;
     } else {
-      childrens = (
-        <View ref={WEBVIEW_REF}>
-          style={webViewStyles}
-          dangerouslySetInnerHTML={{__html: this._html}}
-        </View>
-      );
+      if (this._html) {
+        childrens = (
+          <View ref={WEBVIEW_REF}>
+            style={webViewStyles}
+            dangerouslySetInnerHTML={{__html: this._html}}
+          </View>
+        );
+      }
     }
 
     return (
@@ -530,18 +532,17 @@ class WebView extends React.Component {
       this._onLoadingStart();
       
       fetch(source.uri, {
-        mode: "no-cors",
+        mode: "cors",
         method:  (source.method?source.method:'GET'),
         headers: source.headers,
         body: source.body
-      }).then(res=>{
-        res.text().then(data=>{
-          this._html = data;
-          this._onLoadingFinish();
-        }).catch(err=>{
-          this._onLoadingError({domain:source.uri, description:err});  
-        });
-      }).catch(err=>{
+      })
+      .then(res=>res.text())
+      .then(data=>{
+        this._html = data;
+        this._onLoadingFinish();
+      })
+      .catch(err=>{
         // err.domain = source.uri;
         this._onLoadingError({domain:source.uri, description:err});
       });
