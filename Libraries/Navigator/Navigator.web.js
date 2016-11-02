@@ -901,7 +901,7 @@ let Navigator = React.createClass({
     this._jumpN(-1);
   },
 
-  push: function(route) {
+  push: function(route, cb) {
     invariant(!!route, 'Must supply route to push');
     let activeLength = this.state.presentedIndex + 1;
     let activeStack = this.state.routeStack.slice(0, activeLength);
@@ -919,6 +919,7 @@ let Navigator = React.createClass({
       //history.pushState({ index: destIndex }, '/scene_' + getRouteID(route));
       this._enableScene(destIndex);
       this._transitionTo(destIndex);
+      if (cb) cb();
     });
   },
 
@@ -942,7 +943,7 @@ let Navigator = React.createClass({
       }, ()=>cb&&cb());
   },
 
-  _popN: function(n) {
+  _popN: function(n, cb) {
     if (n === 0) {
       return;
     }
@@ -960,11 +961,12 @@ let Navigator = React.createClass({
       () => {
         //history.go(-n);
         this._cleanScenesPastIndex(popIndex);
+        if (cb) cb();
       }
     );
   },
 
-  pop: function() {
+  pop: function(cb) {
     if (this.state.transitionQueue.length) {
       // This is the workaround to prevent user from firing multiple `pop()`
       // calls that may pop the routes beyond the limit.
@@ -976,7 +978,7 @@ let Navigator = React.createClass({
     }
     
     if (this.state.presentedIndex > 0) {
-      this._popN(1);
+      this._popN(1, cb);
     }
   },
 
@@ -1018,8 +1020,8 @@ let Navigator = React.createClass({
   /**
    * Replaces the current scene in the stack.
    */
-  replace: function(route) {
-    this.replaceAtIndex(route, this.state.presentedIndex);
+  replace: function(route, cb) {
+    this.replaceAtIndex(route, this.state.presentedIndex, cb);
   },
 
   /**
@@ -1029,18 +1031,18 @@ let Navigator = React.createClass({
     this.replaceAtIndex(route, this.state.presentedIndex - 1);
   },
 
-  popToTop: function() {
-    this.popToRoute(this.state.routeStack[0]);
+  popToTop: function(cb) {
+    this.popToRoute(this.state.routeStack[0], cb);
   },
 
-  popToRoute: function(route) {
+  popToRoute: function(route, cb) {
     let indexOfRoute = this.state.routeStack.indexOf(route);
     invariant(
       indexOfRoute !== -1,
       'Calling popToRoute for a route that doesn\'t exist!'
     );
     let numToPop = this.state.presentedIndex - indexOfRoute;
-    this._popN(numToPop);
+    this._popN(numToPop, cb);
   },
 
   replacePreviousAndPop: function(route) {
@@ -1051,13 +1053,16 @@ let Navigator = React.createClass({
     this.pop();
   },
 
-  resetTo: function(route) {
+  resetTo: function(route, cb) {
     invariant(!!route, 'Must supply route to push');
     this.replaceAtIndex(route, 0, () => {
       // Do not use popToRoute here, because race conditions could prevent the
       // route from existing at this time. Instead, just go to index 0
       if (this.state.presentedIndex > 0) {
-        this._popN(this.state.presentedIndex);
+        this._popN(this.state.presentedIndex, cb);
+      }
+      else {
+        cb && cb();
       }
     });
   },
