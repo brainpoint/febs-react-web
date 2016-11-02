@@ -1,6 +1,6 @@
 {
   "name": "citong-react-web",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A framework for building web apps with React",
   "license": "BSD-3-Clause",
   "homepage": "https://github.com/brainpoint/citong-react-web#readme",
@@ -60,6 +60,7 @@
     "citong": "^1.4.2",
     "core-js": "2.2.2",
     "cross-spawn": "4.0.2",
+    "deep-equal": "^1.0.1",
     "domkit": "0.0.1",
     "easyfile": "0.1.0",
     "fbjs": "0.8.3",
