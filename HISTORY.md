@@ -30,3 +30,8 @@
 0.1.8
 ==================
   - 为Navigator的导航函数增加一个callback参数, 但导航完成时回调.
+
+0.1.9
+==================
+  - 为ScrollView.onScroll(ev)事件的ev添加 nativeEvent.contentOffset
+  - 修改ScrollView.scrollEventThrottle
