@@ -16,46 +16,56 @@ let isProd = NODE_ENV === 'production';
 var config = {
   paths: {
     src: path.join(ROOT_PATH, '.'),
-    index: path.join(ROOT_PATH, 'index.ios'),
+    index: path.join(ROOT_PATH, 'index.web'),
   },
 };
 
 var webpackConfig = {
   ip: IP,
   port: PORT,
-  devtool: 'cheap-module-eval-source-map',
+  devtool: isProd ? 'hidden-source-map' : 'cheap-module-eval-source-map',
   resolve: {
     alias: {
       'react-native': 'ReactWeb',
     },
     extensions: ['', '.js', '.web.js', '.ios.js', '.android.js', '.native.js', '.jsx'],
   },
-  entry: isProd ? [
-    config.paths.index
-  ] : [
+  entry: isProd ? {
+    bundle: config.paths.index,
+    vendor: ["react", "react-dom", "react-native"]
+  } : [
     'webpack-dev-server/client?http://' + IP + ':' + PORT,
     'webpack/hot/only-dev-server',
     config.paths.index,
   ],
   output: {
+    publicPath:'/',
     path: path.join(__dirname, 'output'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: isProd? false : true,  // remove all comments
+      },
+      compress: {
+        warnings: isProd? false : true
+      },
+      sourceMap: isProd ? false : true
+    }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
     new HasteResolverPlugin({
       platform: 'web',
       nodeModules: ['react-web']
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(isProd ? PROD : DEV),
-      }
-    }),
+    new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': JSON.stringify(isProd ? PROD : DEV) } }),
     isProd ? new webpack.ProvidePlugin({
       React: 'react'
     }) : new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new HtmlPlugin(),
+    new HtmlPlugin(/*{
+      template: './web/template.html'
+    }*/),
   ],
   module: {
     loaders: [{
