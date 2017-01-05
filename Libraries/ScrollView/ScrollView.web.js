@@ -10,6 +10,8 @@
 
 import React, { PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
+import LayoutAnimation from 'ReactLayoutAnimation';
+import PanResponder from 'ReactPanResponder';
 import ScrollResponder from 'ReactScrollResponder';
 import StyleSheet from 'ReactStyleSheet';
 import View from 'ReactView';
@@ -40,6 +42,17 @@ class ScrollView extends Component {
 
   state = this.scrollResponderMixinGetInitialState();
 
+  componentDidMount() {
+    
+  }
+
+  componentWillUnmount() {
+    if (this._aniFrame) {
+      window.cancelAnimationFrame(this._aniFrame);
+      this._aniFrame = null;
+    }
+  }
+
   /**
    * Returns a reference to the underlying scroll responder, which supports
    * operations like `scrollTo`. All ScrollView-like components should
@@ -60,8 +73,53 @@ class ScrollView extends Component {
     if (typeof opts === 'number') {
       opts = { y: opts, x: arguments[1] };
     }
+    
+    this._scrollViewDom = this._scrollViewDom||ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+    let srcX = this._scrollViewDom.scrollLeft;
+    let srcY = this._scrollViewDom.scrollTop;
+    let stepX = (opts.x||0)-this._scrollViewDom.scrollLeft;
+    let stepY = (opts.y||0)-this._scrollViewDom.scrollTop;
 
-    this.scrollWithoutAnimationTo(opts.y, opts.x);
+
+    let now = Date.now();
+    const durtion = 100;
+    const stepFoo = (timestamp)=>{
+      let now2 = Date.now();
+      if (now2 - now < durtion && now2 - now > 0) {
+        let s = (now2 - now) / durtion;
+        this._scrollViewDom.scrollLeft = srcX + stepX*s;
+        this._scrollViewDom.scrollTop = srcY + stepY*s;
+        this._aniFrame = window.requestAnimationFrame(stepFoo);
+      } else {
+        this._scrollViewDom.scrollLeft = (opts.x||0);
+        this._scrollViewDom.scrollTop = (opts.y||0);
+        this._aniFrame = null;
+      }
+    };
+
+    this._aniFrame = window.requestAnimationFrame(stepFoo);
+
+    // this.state.__offset.setValue({
+    //   y: this._scrollViewDom.scrollTop,
+    //   x: this._scrollViewDom.scrollLeft
+    // });
+
+    // this.state.__scrolling = true;
+
+    // Animated.spring(this.state.__offset, {
+    //   toValue: {x:-(opts.x||0),y:-(opts.y||0)},
+    //   bounciness: 0,
+    //   restSpeedThreshold: 1
+    // }).start(()=>{
+      
+    //   // this.setState({__scrolling:false}, ()=> {
+    //     this._scrollViewDom = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+    //   this._scrollViewDom.scrollTop = -(opts.x||0);
+    //     this._scrollViewDom.scrollLeft = -(opts.y||0);
+    //   // });
+    // });
+
+    //this.scrollWithoutAnimationTo(opts.y, opts.x);
   }
 
   scrollWithoutAnimationTo(destY?: number, destX?: number) {
@@ -71,9 +129,11 @@ class ScrollView extends Component {
     //   destY || 0,
     // );
 
-    this._scrollViewDom = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
-    this._scrollViewDom.scrollTop = destY || 0;
-    this._scrollViewDom.scrollLeft = destX || 0;
+    this.state.__offset.setValue({x:-(destX || 0), y:-(destY || 0)});
+
+    // this._scrollViewDom = ReactDOM.findDOMNode(this.refs[SCROLLVIEW]);
+    // this._scrollViewDom.scrollTop = destY || 0;
+    // this._scrollViewDom.scrollLeft = destX || 0;
   }
 
   handleScroll(e: Event) {
@@ -141,7 +201,8 @@ class ScrollView extends Component {
         ref={INNERVIEW}
         style={contentContainerStyle}
         removeClippedSubviews={this.props.removeClippedSubviews}
-        collapsable={false}>
+        collapsable={false}
+        >
         {this.props.children}
       </View>;
 
@@ -185,6 +246,8 @@ class ScrollView extends Component {
       onResponderRelease: this.scrollResponderHandleResponderRelease,
       onResponderReject: this.scrollResponderHandleResponderReject,
     };
+
+
 
     return (
       <View {...props} ref={SCROLLVIEW}>

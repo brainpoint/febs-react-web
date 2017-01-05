@@ -226,7 +226,11 @@ React Web is [BSD licensed](./LICENSE).
 * Navigator
     - 增加 pushRouteToFront(route, cb) 方法, 允许添加一个route到顶层, 且不刷新页面, 添加完成后调用cb()
     - 为导航方法如pop,push等添加一个cb参数, 当导航完成时调用.
+* ScrollView
+    - 增加scrollTo动画.
 
 #### New APIs features
 * Platform
     - add method: select
+* window.requestAnimationFrame
+* window.cancelAnimationFrame
