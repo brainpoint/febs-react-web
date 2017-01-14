@@ -168,6 +168,7 @@ class ViewPager extends React.Component {
   }
 
   _panResponderMove(ev, {dx}) {
+    ev.preventDefault();
     let val = this.state.selectedPage + dx / this.state.pageWidth * -1;
     this.state.offsetLeft.setValue(val);
   }
