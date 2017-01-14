@@ -10,8 +10,6 @@
 
 import React, { PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
-import LayoutAnimation from 'ReactLayoutAnimation';
-import PanResponder from 'ReactPanResponder';
 import ScrollResponder from 'ReactScrollResponder';
 import StyleSheet from 'ReactStyleSheet';
 import View from 'ReactView';
@@ -41,10 +39,6 @@ const CONTENT_EXT_STYLE = ['padding', 'paddingTop', 'paddingBottom', 'paddingLef
 class ScrollView extends Component {
 
   state = this.scrollResponderMixinGetInitialState();
-
-  componentDidMount() {
-    
-  }
 
   componentWillUnmount() {
     if (this._aniFrame) {
