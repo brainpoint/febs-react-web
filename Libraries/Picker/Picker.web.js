@@ -25,16 +25,14 @@ class Picker extends Component {
   static defaultProps = {
     isRenderSelect: false
   }
-  _onChange(event) {
-    // shim the native event
-    event.nativeEvent.newValue = this.refs[PICKER].value;
 
+  _onChange(event) {
     if (this.props.onChange) {
       this.props.onChange(event);
     }
 
     if (this.props.onValueChange) {
-      this.props.onValueChange(event.nativeEvent.newValue);
+      this.props.onValueChange(this.refs[PICKER].value);
     }
   }
 
@@ -54,12 +52,12 @@ class Picker extends Component {
         </select>
       );
     } else {
-      let label = (this.state && this.state._label);
-      if (!label && this.props.children.length > 0) {
+      let label;
+      if (this.props.children.length > 0) {
         if (!!this.props.selectedValue) {
           for (let i = 0; i < this.props.children.length; i++) {
             if (this.props.selectedValue == this.props.children[i].props.value) {
-              label == this.props.children[i].props.label;
+              label = this.props.children[i].props.label;
               break;
             }
           }
@@ -71,7 +69,7 @@ class Picker extends Component {
       return (
         <TouchableWithoutFeedback onPress={()=>this.refs[PICKER].click()}>
         <View style={this.props.style}>
-          <Text style={{position:'absolute',top:0,left:0,right:0,bottom:0}}>{label}</Text>
+          <Text ref={'picker_label'} style={{position:'absolute',top:0,left:0,right:0,bottom:0}}>{label}</Text>
           <select
             ref={PICKER}
             value={this.props.selectedValue}
@@ -79,11 +77,12 @@ class Picker extends Component {
               flex: 1,
               opacity: 0,
               }}
-            onChange={()=>{ 
+            onChange={(event)=>{
               let c = this.refs[PICKER];
               let ct = c.options[c.selectedIndex].text;
-              this.setState({_label:ct});
-              this._onChange(c.value, ct); 
+              this.setState({});
+              // this.refs.picker_label.refs.text.value = ct;
+              this._onChange(event); 
             } }
           >
           {this.props.children}
