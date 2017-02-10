@@ -23,7 +23,7 @@ var config = {
 var webpackConfig = {
   ip: IP,
   port: PORT,
-  devtool: isProd ? 'hidden-source-map' : 'cheap-module-eval-source-map',
+  devtool: isProd ? 'hidden-source-map' : 'source-map',
   resolve: {
     alias: {
       'react-native': 'ReactWeb',
@@ -44,28 +44,36 @@ var webpackConfig = {
     filename: '[name].js'
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      output: {
-        comments: isProd? false : true,  // remove all comments
-      },
-      compress: {
-        warnings: isProd? false : true
-      },
-      sourceMap: isProd ? false : true
-    }),
+    new webpack.optimize.UglifyJsPlugin(
+      isProd ? {
+        output: {
+          comments: false,  // remove all comments
+        },
+        compress: {
+          warnings: false
+        },
+        sourceMap: false 
+      } : {
+        output: {
+          comments: true,  // remove all comments
+          beautify: true,
+        },
+        compress: false,
+        mangle : false,
+        sourceMap: true,       
+      }
+    ),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
     new HasteResolverPlugin({
       platform: 'web',
       nodeModules: ['react-web']
     }),
     new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': JSON.stringify(isProd ? PROD : DEV) } }),
-    isProd ? new webpack.ProvidePlugin({
-      React: 'react'
-    }) : new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new HtmlPlugin(/*{
+    new webpack.ProvidePlugin({ React: 'react' }),
+    new webpack.NoErrorsPlugin(), // allow error not to interrupt app
+    new HtmlPlugin({
       template: './web/template.html'
-    }*/),
+    }),
   ],
   module: {
     loaders: [{
@@ -84,6 +92,9 @@ var webpackConfig = {
       },
       include: [config.paths.src],
       exclude: [path.sep === '/' ? /(node_modules\/(?!react))/ : /(node_modules\\(?!react))/]
+    }, { 
+      test: /\.(png|jpg)$/, 
+      loader: 'url-loader?limit=8192'
     }]
   }
 };

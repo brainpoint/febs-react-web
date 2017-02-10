@@ -12,12 +12,12 @@
 
 var fs = require('fs');
 var path = require('path');
-var citong = require('citong');
+var febs = require('febs');
 
 function getRoot() {
-  if (__dirname.match(/citong-react-web[\/\\]scripts$/)) {
+  if (__dirname.match(/febs-react-web[\/\\]scripts$/)) {
     // CLI is running from node_modules.
-    // This is the default case for all projects created using 'citong-react-web init'.
+    // This is the default case for all projects created using 'febs-react-web init'.
     return path.resolve(__dirname, '../');
   } else {
     return null;
@@ -34,8 +34,8 @@ function run() {
     if (fs.existsSync(path.join(pa, 'lib')))
     {
       console.log('rm lib directory');
-      citong.file.dirRemoveRecursive(path.join(pa, 'lib'));
-      //fs.rmdirSync(path.join(pa, 'react-web'));
+      febs.file.dirRemoveRecursive(path.join(pa, 'lib'));
+      //fs.rmdirSync(path.join(pa, 'febs-react-web'));
     }
   } else {
     console.log('run cli in error directory!');

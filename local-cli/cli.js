@@ -60,7 +60,7 @@ function run() {
 
 function printUsage() {
   console.log([
-    'Usage: citong-react-web <command>',
+    'Usage: febs-react-web <command>',
     '',
     'Commands:'
   ].concat(Object.keys(documentedCommands).map(function(name) {
@@ -70,12 +70,12 @@ function printUsage() {
 }
 
 // The user should never get here because projects are inited by
-// using `citong-react-web-cli` from outside a project directory.
+// using `febs-react-web-cli` from outside a project directory.
 function printInitWarning() {
   return Promise.resolve().then(function() {
     console.log([
       'Looks like React Web project already exists in the current',
-      'folder. Run this command from a different folder or remove node_modules/citong-react-web'
+      'folder. Run this command from a different folder or remove node_modules/febs-react-web'
     ].join('\n'));
     process.exit(1);
   });
@@ -88,17 +88,17 @@ function printInitWarning() {
  *   - argsOrName: project name or full list of custom arguments to pass to the
  *                 generator.
  */
-function init(projectDir, argsOrName) {
-  console.log('Setting up new React Web app in ' + projectDir);
+function init(projectDir, argsOrName, cb) {
+  console.log('Setting up new Febs React Web app in ' + projectDir);
 
   // argv is for instance
-  // ['node', 'citong-react-web', 'init', 'AwesomeApp', '--verbose']
+  // ['node', 'febs-react-web', 'init', 'AwesomeApp', '--verbose']
   // args should be ['AwesomeApp', '--verbose']
   var args = Array.isArray(argsOrName)
     ? argsOrName
     : [argsOrName].concat(process.argv.slice(4));
 
-  generateWeb(projectDir, defaultConfig);
+  generateWeb(projectDir, defaultConfig, cb);
 
 }
 

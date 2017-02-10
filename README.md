@@ -1,31 +1,30 @@
-# Citong React Web
+# Febs React Web
 
 > A framework for building web apps with React Native compatible API.
 
 > 在 [React-web@0.3.2](http://github.com/taobaofed/react-web) 的基础上编写.
 
-> 部署等相关内容查阅 [React-web@0.3.2 README](./README-react-web.md)
 ## Adding web to an existing React Native project
 
 If you already have a React Native project and want to add web support, you need to execute the following commands in your existing project directory:
 
-1. Install `npm install citong-react-web-cli -g`
-2. Execute `citong-react-web init <ExistedProjectDir>`. That install `citong-react-web` and `devDependencies` to your project and make a `web` directory with `webpack.config.js` file under your project
+1. Install `npm install febs-react-web-cli -g`
+2. Execute `febs-react-web init <ExistedProjectDir>`. That install `febs-react-web` and `devDependencies` to your project and make a `web` directory with `webpack.config.js` file under your project
 3. Register your app into a web platform. To do so, add the code from **Fix platform differences. 2. Should run application on web platform** to your index.web.js file
-4. Execute `citong-react-web start` that starts the web dev server
-5. Execute `citong-react-web bundle` that builds the output
+4. Execute `febs-react-web start` that starts the web dev server
+5. Execute `febs-react-web bundle` that builds the output
 
 ## Getting Started
 
 ### Install
 
 ```sh
-npm install citong-react-web --save
+npm install febs-react-web --save
 ```
 
 ### Add Webpack configuration
 
-Inside your webpack configuration, alias the `react-native` package to the `react-web` package, then install and add [haste-resolver-webpack-plugin](https://github.com/yuanyan/haste-resolver-webpack-plugin) plugin.
+Inside your webpack configuration, alias the `react-native` package to the `febs-react-web` package, then install and add [haste-resolver-webpack-plugin](https://github.com/yuanyan/haste-resolver-webpack-plugin) plugin.
 
 ```js
 // webpack.config.js
@@ -34,13 +33,13 @@ var HasteResolverPlugin = require('haste-resolver-webpack-plugin');
 module.exports = {
   resolve: {
     alias: {
-      'react-native': 'citong-react-web'
+      'react-native': 'febs-react-web'
     }
   },
   plugins: [
     new HasteResolverPlugin({
       platform: 'web',
-      nodeModules: ['citong-react-web']
+      nodeModules: ['febs-react-web']
     })
   ]
 }
@@ -50,7 +49,7 @@ module.exports = {
 
 #### What does HasteResolverPlugin do?
 
-When using components of `react-web`, just `require('ReactActivityIndicator')`, and Webpack will build a bundle with `ActivityIndicator.web.js` for web platform.
+When using components of `febs-react-web`, just `require('ReactActivityIndicator')`, and Webpack will build a bundle with `ActivityIndicator.web.js` for web platform.
 
 `HasteResolverPlugin` will do the following for you:
 
@@ -58,7 +57,7 @@ When using components of `react-web`, just `require('ReactActivityIndicator')`, 
 2. When webpack build bundle, it makes your components recognised rather than throwing an error.
 3. It will help webpack build bundle with correct file depending on the tar* platform.
 
-You can find something like `@providesModule ReactActivityIndicator` on `react-web` component's comment, yes, it's for `HasteResolverPlugin`.
+You can find something like `@providesModule ReactActivityIndicator` on `febs-react-web` component's comment, yes, it's for `HasteResolverPlugin`.
 
 ### Require modules
 
@@ -79,7 +78,7 @@ This reference method looks like we're in the way of using the native react-nati
 Like the require module in Node.js, and through [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), allows some components to be referenced in the scope of the current file.
 
 But in fact it is quite different in React Web.
-When `require('react-native')`, in the construction of the webpack will be renamed, equivalent to `require('react-web')`.
+When `require('react-native')`, in the construction of the webpack will be renamed, equivalent to `require('febs-react-web')`.
 
 At the same time, this form of writing will put all the components into at one time, including `ReactAppRegistry` `ReactView` and so on, even some components the you did not use.
 

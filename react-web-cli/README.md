@@ -1,5 +1,7 @@
 # The React Web CLI tools
 
-* `citong-react-web init <ProjectDir>`
-* `citong-react-web start`
-* `citong-react-web bundle`
+use cnpm to get package.
+
+* `febs-react-web init <ProjectDir>`
+* `febs-react-web start`
+* `febs-react-web bundle`

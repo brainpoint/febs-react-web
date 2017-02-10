@@ -10,7 +10,7 @@ var spawn = require('cross-spawn');
 var easyfile = require('easyfile');
 var packageJson = require('../../package.json');
 
-function installDev(projectDir, verbose) {
+function installDev(projectDir, verbose, cb) {
   var proc = spawn('npm', [
     'install',
     verbose? '--verbose': '',
@@ -31,24 +31,43 @@ function installDev(projectDir, verbose) {
       console.error('`npm install` failed');
       return;
     } else {
-      console.log(chalk.white.bold('To run your app on browser:'));
-      console.log(chalk.white('   cd ' + projectDir));
-      console.log(chalk.white('   citong-react-web start'));
+      console.log(chalk.green.bold('To run your app on browser:'));
+      console.log(chalk.green('   cd ' + projectDir));
+      console.log(chalk.green('   febs-react-web start'));
     }
+
+    cb(code);
   });
 }
 
-module.exports = function(projectDir, config) {
+module.exports = function(projectDir, config, cb) {
 
   var root = config.getRoot();
+
+  // webpack.config.js.
   var src = path.join(__dirname, 'templates/webpack.config.js');
   var dest = path.join(root, 'web/webpack.config.js');
-
+  easyfile.copy(src, dest, {
+    force: true,
+    backup: true,
+  });
+    
+  // template.html.
+  src = path.join(__dirname, 'templates/template.html');
+  dest = path.join(root, 'web/template.html');
+  easyfile.copy(src, dest, {
+    force: true,
+    backup: true,
+  });
+  
+  // index.web.js
+  src = path.join(__dirname, 'templates/index.web.js');
+  dest = path.join(root, 'index.web.js');
   easyfile.copy(src, dest, {
     force: true,
     backup: true,
   });
 
   process.chdir(root);
-  installDev(projectDir);
+  installDev(projectDir, false, cb);
 }

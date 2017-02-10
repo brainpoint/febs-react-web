@@ -12,12 +12,12 @@
 
 var fs = require('fs');
 var path = require('path');
-var citong = require('citong');
+var febs = require('febs');
 
 function getRoot() {
-  if (__dirname.match(/node_modules[\/\\]citong-react-web[\/\\]scripts$/)) {
+  if (__dirname.match(/node_modules[\/\\]febs-react-web[\/\\]scripts$/)) {
     // CLI is running from node_modules.
-    // This is the default case for all projects created using 'citong-react-web init'.
+    // This is the default case for all projects created using 'febs-react-web init'.
     return path.resolve(__dirname, '../../');
   } else {
     return null;
@@ -34,45 +34,37 @@ function run() {
     if (fs.existsSync(path.join(pa, 'react-web')))
     {
       console.log('rm react-web directory');
-      citong.file.dirRemoveRecursive(path.join(pa, 'react-web'));
-      //fs.rmdirSync(path.join(pa, 'react-web'));
+      febs.file.dirRemoveRecursive(path.join(pa, 'react-web'));
     }
 
-    //fs.symlinkSync(path.join(pa, 'citong-react-web'), path.join(pa, 'react-web'), 'dir');
-    console.log('cp citong-react-web -> react-web');
+    //fs.symlinkSync(path.join(pa, 'febs-react-web'), path.join(pa, 'febs-react-web'), 'dir');
+    console.log('cp febs-react-web -> react-web');
 
     // brower.
     var arr = [];
-    var dirpath = 'citong-react-web';
+    var dirpath = 'febs-react-web';
     var arrFiles = fs.readdirSync(path.join(pa, dirpath));
-
-    var packjson_path = path.join(pa, dirpath + '/scripts/package.json');
-    arr.push(packjson_path);
 
     arrFiles.forEach(function(e) {
       if (e != 'package.json')
         arr.push(path.join(pa, dirpath + '/' + e));
     });
 
-    citong.file.dirAssure(path.join(pa, 'react-web'));
+    febs.file.dirAssure(path.join(pa, 'react-web'));
 
     for (var i = 0; i < arr.length; i++) {
       try {
-        var pp = citong.string.replace(arr[i], 'citong-react-web', 'react-web');
-        if (citong.file.dirIsExist(arr[i])) {
-          //citong.file.dirAssure(pp);
-          citong.file.dirAssure(pp);
+        var pp = febs.string.replace(arr[i], 'febs-react-web', 'react-web');
+        if (febs.file.dirIsExist(arr[i])) {
+          //febs.file.dirAssure(pp);
+          febs.file.dirAssure(pp);
           dirpath = arr[i];
           arrFiles = fs.readdirSync(dirpath);
           arrFiles.forEach(function(e) {
             arr.push(path.join(dirpath , e));
           });
         } else {
-          if (packjson_path == arr[i])
-            fs.renameSync(arr[i], path.join(pa, 'react-web/package.json'));
-          else
-          //citong.file.fileCopy(arr[i], pp);
-            fs.renameSync(arr[i], pp);
+            febs.file.fileCopy(arr[i], pp);
         }
       } catch (e) {
         console.log(e);
