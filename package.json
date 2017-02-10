@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "name": "febs-react-web",
   "version": "0.0.12",
+=======
+  "name": "citong-react-web",
+  "version": "0.2.6",
+>>>>>>> origin/master
   "description": "A framework for building web apps with React",
   "license": "BSD-3-Clause",
   "homepage": "https://github.com/brainpoint/febs-react-web#readme",
