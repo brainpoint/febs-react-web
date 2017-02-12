@@ -1,6 +1,6 @@
 {
   "name": "febs-react-web",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A framework for building web apps with React",
   "license": "BSD-3-Clause",
   "homepage": "https://github.com/brainpoint/febs-react-web#readme",
@@ -21,8 +21,6 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint . --ext .js --ext .jsx",
-    "start": "node local-cli/cli.js start webpack.config.js",
-    "demo": "node local-cli/cli.js bundle webpack.config.js",
     "postinstall": "node scripts/rename-package.js"
   },
   "devDependencies": {
@@ -51,6 +49,7 @@
     "babel-core": "6.16.0",
     "babel-helper-bindify-decorators": "^6.22.0",
     "babel-helper-function-name": "^6.22.0",
+    "babel-polyfill": "^6.16.0",
     "babel-preset-react-native": "^1.9.0",
     "babel-runtime": "^6.22.0",
     "chalk": "1.1.1",

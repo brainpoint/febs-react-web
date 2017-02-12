@@ -31,7 +31,7 @@ var webpackConfig = {
     extensions: ['', '.js', '.web.js', '.ios.js', '.android.js', '.native.js', '.jsx'],
   },
   entry: isProd ? {
-    bundle: config.paths.index,
+    bundle: ['babel-polyfill', config.paths.index],
     vendor: ["react", "react-dom", "react-native"]
   } : [
     'webpack-dev-server/client?http://' + IP + ':' + PORT,

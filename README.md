@@ -4,100 +4,19 @@
 
 > 在 [React-web@0.3.2](http://github.com/taobaofed/react-web) 的基础上编写.
 
-## Adding web to an existing React Native project
+> Febs React Web 项目兼容react-native, 能够以react-native方式编写项目, 并且最终导出html/js方式. 基于reactjs, 构建单页/多页webapp.
 
-If you already have a React Native project and want to add web support, you need to execute the following commands in your existing project directory:
+## Create a new project
 
 1. Install `npm install febs-react-web-cli -g`
-2. Execute `febs-react-web init <ExistedProjectDir>`. That install `febs-react-web` and `devDependencies` to your project and make a `web` directory with `webpack.config.js` file under your project
-3. Register your app into a web platform. To do so, add the code from **Fix platform differences. 2. Should run application on web platform** to your index.web.js file
-4. Execute `febs-react-web start` that starts the web dev server
-5. Execute `febs-react-web bundle` that builds the output
+2. Execute `febs-react-web init <ProjectDir>`.
+3. Execute `febs-react-web start` that starts the web dev server
+4. Execute `febs-react-web bundle` that builds the output.
 
-## Getting Started
+    ( In Linux system maybe use `sudo` )
 
-### Install
 
-```sh
-npm install febs-react-web --save
-```
-
-### Add Webpack configuration
-
-Inside your webpack configuration, alias the `react-native` package to the `febs-react-web` package, then install and add [haste-resolver-webpack-plugin](https://github.com/yuanyan/haste-resolver-webpack-plugin) plugin.
-
-```js
-// webpack.config.js
-var HasteResolverPlugin = require('haste-resolver-webpack-plugin');
-
-module.exports = {
-  resolve: {
-    alias: {
-      'react-native': 'febs-react-web'
-    }
-  },
-  plugins: [
-    new HasteResolverPlugin({
-      platform: 'web',
-      nodeModules: ['febs-react-web']
-    })
-  ]
-}
-```
-
-> See more detail of the `webpack.config.js` from [React Native Web Example](https://github.com/yuanyan/react-native-web-example/blob/master/web/webpack.config.js)
-
-#### What does HasteResolverPlugin do?
-
-When using components of `febs-react-web`, just `require('ReactActivityIndicator')`, and Webpack will build a bundle with `ActivityIndicator.web.js` for web platform.
-
-`HasteResolverPlugin` will do the following for you:
-
-1. Walk over all components and check out the `@providesModule` info.
-2. When webpack build bundle, it makes your components recognised rather than throwing an error.
-3. It will help webpack build bundle with correct file depending on the tar* platform.
-
-You can find something like `@providesModule ReactActivityIndicator` on `febs-react-web` component's comment, yes, it's for `HasteResolverPlugin`.
-
-### Require modules
-
-#### The CommonJS way
-
-```js
-var React = require('react-native');
-var {
-  AppRegistry,
-  StyleSheet,
-  View,
-  Platform,
-} = React;
-```
-
-This reference method looks like we're in the way of using the native react-native way:
-
-Like the require module in Node.js, and through [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), allows some components to be referenced in the scope of the current file.
-
-But in fact it is quite different in React Web.
-When `require('react-native')`, in the construction of the webpack will be renamed, equivalent to `require('febs-react-web')`.
-
-At the same time, this form of writing will put all the components into at one time, including `ReactAppRegistry` `ReactView` and so on, even some components the you did not use.
-
-#### The Haste way
-
-```js
-var AppRegistry = require('ReactAppRegistry');
-var View = require('ReactView');
-var Text = require('ReactText');
-var Platform = require('ReactPlatform');
-```
-
-In this way, we load our components on demand, such as `ReactAppRegistry` or `ReactView` and so on.
-
-Packaged components so that we no longer need to care about the differences between the platform.
-
-As mentioned above, the HasteResolverPlugin plugin will help webpack to compile and package the code.
-
-### Fix platform differences
+## Fix platform differences
 
 1. Native events without direct pageX/pageY on web platform
   ```js
@@ -113,11 +32,11 @@ As mentioned above, the HasteResolverPlugin plugin will help webpack to compile 
 
 2. Should run application on web platform
   ```js
-  AppRegistry.registerComponent('Game2048', () => Game2048);
+  AppRegistry.registerComponent('app', () => app);
   if(Platform.OS == 'web'){
     var app = document.createElement('div');
     document.body.appendChild(app);
-    AppRegistry.runApplication('Game2048', {
+    AppRegistry.runApplication('app', {
       rootTag: app
     })
   }
@@ -147,7 +66,7 @@ As mentioned above, the HasteResolverPlugin plugin will help webpack to compile 
   <ScrollView style={{height: 235}} horizontal={true} />
   ```
 
-### React Native compatible
+## React Native compatible
 
 #### Components
 
@@ -194,22 +113,6 @@ As mentioned above, the HasteResolverPlugin plugin will help webpack to compile 
 * PixelRatio - ReactPixelRatio
 * StyleSheet - ReactStyleSheet
 
-#### Plugins
-
-* NativeModules - ReactNativeModules
-* Platform - ReactPlatform
-* processColor - ReactProcessColor
-
-## Scripts
-
-* Linting - **npm run lint** - Must run it before commit.
-* Testing - **npm test** - Run unit testing by jest.
-* Developing - **npm start** - This will run a server at *localhost:3000* and use Hot Module Reloading.
-* Demo deployment - **npm run demo** - Generate demo assets under *pages* directory.
-
-## License
-
-React Web is [BSD licensed](./LICENSE).
 
 #### New Components features
 * ActivityIndicator
