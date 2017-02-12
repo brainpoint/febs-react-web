@@ -11,7 +11,7 @@ var NODE_ENV = process.env.NODE_ENV;
 var ROOT_PATH = path.resolve(__dirname, '..');
 var PROD = 'production';
 var DEV = 'development';
-let isProd = NODE_ENV === 'production';
+let isProd = true;//NODE_ENV === 'production';
 
 var config = {
   paths: {
