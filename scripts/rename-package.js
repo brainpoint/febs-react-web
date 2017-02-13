@@ -13,6 +13,7 @@
 var fs = require('fs');
 var path = require('path');
 var febs = require('febs');
+var co   = require('co');
 
 function getRoot() {
   if (__dirname.match(/node_modules[\/\\]febs-react-web[\/\\]scripts$/)) {
@@ -52,24 +53,28 @@ function run() {
 
     febs.file.dirAssure(path.join(pa, 'react-web'));
 
-    for (var i = 0; i < arr.length; i++) {
-      try {
-        var pp = febs.string.replace(arr[i], 'febs-react-web', 'react-web');
-        if (febs.file.dirIsExist(arr[i])) {
-          //febs.file.dirAssure(pp);
-          febs.file.dirAssure(pp);
-          dirpath = arr[i];
-          arrFiles = fs.readdirSync(dirpath);
-          arrFiles.forEach(function(e) {
-            arr.push(path.join(dirpath , e));
-          });
-        } else {
-            febs.file.fileCopy(arr[i], pp);
+    co(function*(){
+      for (var i = 0; i < arr.length; i++) {
+        try {
+          var pp = febs.string.replace(arr[i], 'febs-react-web', 'react-web');
+          if (febs.file.dirIsExist(arr[i])) {
+            //febs.file.dirAssure(pp);
+            febs.file.dirAssure(pp);
+            dirpath = arr[i];
+            arrFiles = fs.readdirSync(dirpath);
+            arrFiles.forEach(function(e) {
+              arr.push(path.join(dirpath , e));
+            });
+          } else {
+            yield febs.utils.denodeify(febs.file.fileCopy)(arr[i], pp);
+          }
+        } catch (e) {
+          console.log(e);
         }
-      } catch (e) {
-        console.log(e);
       }
-    }
+      console.log('copy dir ok');
+    });
+
   } else {
     console.log('run cli in error directory!');
   }

@@ -360,14 +360,8 @@ function checkForVersionArgument() {
 
 
 function installReactNative(projectName, version, cb) {
-  console.log('Will config registry ' + "https://registry.npmjs.org/".info + ' to Install ' + 'react-native-cli'.info + '...');
-  exec(sudocmd + 'npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
-    if (e) {
-      console.error('npm set registry failed');
-      console.error(e);
-      process.exit(1);
-    }
-    
+  
+  useCnpmConfirmation(function(){
     console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
     var cmd = is_win ? 'npm install -g yarn react-native-cli' : 'npm install -g react-native-cli';
 
@@ -378,20 +372,17 @@ function installReactNative(projectName, version, cb) {
         process.exit(1);
       }
 
-      useCnpmConfirmation(function(){
-        // react-native.
-        console.log('Creating a ' + 'react-native'.info + (version?'@'+version:'').info + ' project...');
-        exec(sudocmd + 'react-native init ' + projectName + (version ? ' --version='+version : ''), function(e, stdout, stderr) {
-          if (e) {
-            console.error('install react-native' + (version?'@'+version:'') + ' failed');
-            console.error(e);
-            process.exit(1);
-          }
-          cb();
-        });
+      // react-native.
+      console.log('Creating a ' + 'react-native'.info + (version?'@'+version:'').info + ' project...');
+      exec(sudocmd + 'react-native init ' + projectName + (version ? ' --version='+version : ''), function(e, stdout, stderr) {
+        if (e) {
+          console.error('install react-native' + (version?'@'+version:'') + ' failed');
+          console.error(e);
+          process.exit(1);
+        }
+        cb();
       });
     });
-
   });
 }
 
