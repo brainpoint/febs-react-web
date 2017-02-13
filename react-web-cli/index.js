@@ -63,7 +63,8 @@ var febs   = require('febs');
 var os = require('os');
 
 var reactnativeVer = '0.41.0';
-var sudocmd = ((os.platform().indexOf('win') == 0) ? '' : 'sudo ');
+var is_win = (os.platform().indexOf('win') == 0);
+var sudocmd = (is_win ? '' : 'sudo ');
 
 /**
  * Used arguments:
@@ -368,7 +369,9 @@ function installReactNative(projectName, version, cb) {
     }
     
     console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
-    exec(sudocmd + 'npm install -g react-native-cli', function(e, stdout, stderr) {
+    var cmd = is_win ? 'npm install -g yarn react-native-cli' : 'npm install -g react-native-cli';
+
+    exec(sudocmd + cmd, function(e, stdout, stderr) {
       if (e) {
         console.error('install react-native-cli failed');
         console.error(e);
