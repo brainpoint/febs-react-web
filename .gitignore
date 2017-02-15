@@ -54,3 +54,18 @@ $RECYCLE.BIN/
 #
 node_modules
 npm-debug.log
+
+#
+# demo.
+#
+demo/.babelrc
+demo/.buckconfig
+demo/android
+demo/ios
+demo/__tests__
+demo/yarn.lock
+demo/.watchmanconfig
+demo/.flowconfig
+demo/.gitattributes
+demo/.gitignore
+
