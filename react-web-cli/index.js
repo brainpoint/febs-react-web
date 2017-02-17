@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+
 /**
  * Copyright (c) 2015-present, Alibaba Group Holding Limited.
  * All rights reserved.
