@@ -179,7 +179,7 @@ function useCnpmConfirmation(cb) {
 
   var property = {
     name: 'usecnpm',
-    message: 'Do you use taobao npm registry?',
+    message: 'Do you wanna use taobao npm registry?',
     validator: /y[es]*|n[o]?/,
     warning: 'Must respond yes or no',
     default: 'no'
@@ -187,14 +187,15 @@ function useCnpmConfirmation(cb) {
 
   prompt.get(property, function (err, result) {
     if (result.usecnpm[0] === 'y') {
-      console.log('will config registry to https://registry.npm.taobao.org'.data);
+      console.log('will config registry to https://registry.npm.taobao.org'.verbose);
+
       exec('npm config set registry "https://registry.npm.taobao.org"', function(e, stdout, stderr) {
         if (e) {
           console.error('npm set registry failed');
           console.error(e);
           process.exit(1);
         }
-        cb();
+        cb&&cb();
       });
     } else {
       exec('npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
@@ -203,8 +204,39 @@ function useCnpmConfirmation(cb) {
           console.error(e);
           process.exit(1);
         }
-        cb();
+        cb&&cb();
       });
+    }
+  });
+}
+
+function installRNCliConfirmation(cb) {
+  prompt.start();
+
+  var property = {
+    name: 'rncli',
+    message: 'Did you already install ' + 'react-native-cli'.info + '?',
+    validator: /y[es]*|n[o]?/,
+    warning: 'Must respond yes or no',
+    default: 'yes'
+  };
+
+  prompt.get(property, function (err, result) {
+    if (result.rncli[0] === 'n') {
+      console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
+      var cmd = is_win ? 'npm install -g yarn react-native-cli' : 'npm install -g react-native-cli';
+
+      exec(cmd, function(e, stdout, stderr) {
+        if (e) {
+          console.error('install react-native-cli failed');
+          console.error(e);
+          process.exit(1);
+        }
+        
+        cb && cb();
+      });
+    } else {
+      cb && cb();
     }
   });
 }
@@ -222,7 +254,7 @@ function restoreNpmConfirmation() {
 
   prompt.get(property, function (err, result) {
     if (result.restorenpm[0] === 'y') {
-      console.log('will config registry to https://registry.npmjs.org/'.data);
+      console.log('will config registry to https://registry.npmjs.org/'.verbose);
       exec('npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
         if (e) {
           console.error('npm set registry failed');
@@ -261,34 +293,38 @@ function createProject(name, verbose, rwPackage) {
   var root = path.resolve(name);
   var projectName = path.basename(root);
 
-  installReactNative(projectName, reactnativeVer, function(){
-    console.log(
-      'This will walk you through creating a new [' + 'Febs React Web'.info + '] project in',
-      root.info
-    );
+  useCnpmConfirmation(function(){
+    installRNCliConfirmation(function(){
+      installReactNative(projectName, reactnativeVer, function(){
+        console.log(
+          'This will walk you through creating a new [' + 'Febs React Web'.info + '] project in',
+          root.info
+        );
 
-    if (!fs.existsSync(root)) {
-      fs.mkdirSync(root);
-    }
+        if (!fs.existsSync(root)) {
+          fs.mkdirSync(root);
+        }
 
-    var packageJsonPath = path.join(root, 'package.json');
+        var packageJsonPath = path.join(root, 'package.json');
 
-    if (!fs.existsSync(packageJsonPath)) {
-      var packageJson = {
-        name: projectName,
-        version: '0.0.1',
-        private: true,
-      };
-      fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
-    }
+        if (!fs.existsSync(packageJsonPath)) {
+          var packageJson = {
+            name: projectName,
+            version: '0.0.1',
+            private: true,
+          };
+          fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
+        }
 
-    process.chdir(root);
+        process.chdir(root);
 
-    if (verbose) {
-      runVerbose(root, projectName, rwPackage);
-    } else {
-      run(root, projectName, rwPackage);
-    }
+        if (verbose) {
+          runVerbose(root, projectName, rwPackage);
+        } else {
+          run(root, projectName, rwPackage);
+        }
+      });    
+    });
   });
 }
 
@@ -307,13 +343,11 @@ function getInstallPackage(rwPackage) {
 }
 
 function run(root, projectName, rwPackage) {
-  exec('npm install --save --save-exact ' + getInstallPackage(rwPackage), function(e, stdout, stderr) {
-    if (e) {
-      console.log(stdout);
-      console.error(stderr);
+  var proc = spawn('npm', ['install', '--save', '--save-exact', getInstallPackage(rwPackage)], {stdio: 'inherit'});
+  proc.on('close', function (code) {
+    if (code !== 0) {
       console.error('`npm install --save --save-exact febs-react-web` failed');
-      console.error(e);
-      process.exit(1);
+      return;
     }
 
     checkForDependencies(function(err){
@@ -359,35 +393,31 @@ function checkForVersionArgument() {
 }
 
 
-function installReactNative(projectName, version, cb) {
+function installReactNative(projectName, version, cb) { 
+  // react-native.
+  console.log('It will take a while...'.input);
+  console.log('Creating a ' + 'react-native'.info + (version?'@'+version:'').info + ' project...');
   
-  useCnpmConfirmation(function(){
-    console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
-    var cmd = is_win ? 'npm install -g yarn react-native-cli' : 'npm install -g react-native-cli';
+  var proc = spawn('react-native', [
+    'init',
+    projectName,
+    (version ? '--version='+version : ''),
+    '--verbose'
+  ], {stdio: 'inherit'});
 
-    exec(cmd, function(e, stdout, stderr) {
-      if (e) {
-        console.error('install react-native-cli failed');
-        console.error(e);
-        process.exit(1);
-      }
-
-      // react-native.
-      console.log('Creating a ' + 'react-native'.info + (version?'@'+version:'').info + ' project...');
-      exec('react-native init ' + projectName + (version ? ' --version='+version : ''), function(e, stdout, stderr) {
-        if (e) {
-          console.error('install react-native' + (version?'@'+version:'') + ' failed');
-          console.error(e);
-          process.exit(1);
-        }
-        cb();
-      });
-    });
+  proc.on('close', function (code) {
+    if (code !== 0) {
+      console.error('install react-native' + (version?'@'+version:'') + ' failed');
+      console.error(e);
+      process.exit(1);
+    } else {
+      cb&&cb(code);
+    }
   });
 }
 
 function checkForDependencies(cb) {
-  cb();
+  cb&&cb();
   return;
 
   console.log('Installing dependencies package from npm...');
@@ -405,7 +435,7 @@ function checkForDependencies(cb) {
     return checkForDependenciesPkg('core-js', null, true);
   })
   .then(()=>{
-    cb();
+    cb&&cb();
   })
   .catch(err=>{});
 }
@@ -422,9 +452,9 @@ function checkForDependenciesPkg(pkgName, jsonFile, verbose, cb) {
   proc.on('close', function (code) {
     if (code !== 0) {
       console.error('`npm install`' + pkgName + ' failed');
-      cb(code);
+      cb&&cb(code);
     } else {
-      cb(code);
+      cb&&cb(code);
     }
   });
 }
