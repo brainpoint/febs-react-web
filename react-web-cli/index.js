@@ -65,7 +65,6 @@ var os = require('os');
 
 var reactnativeVer = '0.41.0';
 var is_win = (os.platform().indexOf('win') == 0);
-var sudocmd = (is_win ? '' : 'sudo ');
 
 /**
  * Used arguments:
@@ -189,7 +188,7 @@ function useCnpmConfirmation(cb) {
   prompt.get(property, function (err, result) {
     if (result.usecnpm[0] === 'y') {
       console.log('will config registry to https://registry.npm.taobao.org'.data);
-      exec(sudocmd + 'npm config set registry "https://registry.npm.taobao.org"', function(e, stdout, stderr) {
+      exec('npm config set registry "https://registry.npm.taobao.org"', function(e, stdout, stderr) {
         if (e) {
           console.error('npm set registry failed');
           console.error(e);
@@ -198,7 +197,7 @@ function useCnpmConfirmation(cb) {
         cb();
       });
     } else {
-      exec(sudocmd + 'npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
+      exec('npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
         if (e) {
           console.error('npm set registry failed');
           console.error(e);
@@ -224,7 +223,7 @@ function restoreNpmConfirmation() {
   prompt.get(property, function (err, result) {
     if (result.restorenpm[0] === 'y') {
       console.log('will config registry to https://registry.npmjs.org/'.data);
-      exec(sudocmd + 'npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
+      exec('npm config set registry "https://registry.npmjs.org/"', function(e, stdout, stderr) {
         if (e) {
           console.error('npm set registry failed');
           console.error(e);
@@ -308,7 +307,7 @@ function getInstallPackage(rwPackage) {
 }
 
 function run(root, projectName, rwPackage) {
-  exec(sudocmd + 'npm install --save --save-exact ' + getInstallPackage(rwPackage), function(e, stdout, stderr) {
+  exec('npm install --save --save-exact ' + getInstallPackage(rwPackage), function(e, stdout, stderr) {
     if (e) {
       console.log(stdout);
       console.error(stderr);
@@ -366,7 +365,7 @@ function installReactNative(projectName, version, cb) {
     console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
     var cmd = is_win ? 'npm install -g yarn react-native-cli' : 'npm install -g react-native-cli';
 
-    exec(sudocmd + cmd, function(e, stdout, stderr) {
+    exec(cmd, function(e, stdout, stderr) {
       if (e) {
         console.error('install react-native-cli failed');
         console.error(e);
@@ -375,7 +374,7 @@ function installReactNative(projectName, version, cb) {
 
       // react-native.
       console.log('Creating a ' + 'react-native'.info + (version?'@'+version:'').info + ' project...');
-      exec(sudocmd + 'react-native init ' + projectName + (version ? ' --version='+version : ''), function(e, stdout, stderr) {
+      exec('react-native init ' + projectName + (version ? ' --version='+version : ''), function(e, stdout, stderr) {
         if (e) {
           console.error('install react-native' + (version?'@'+version:'') + ' failed');
           console.error(e);

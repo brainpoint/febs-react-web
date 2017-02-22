@@ -27,6 +27,11 @@ function _bundle(argv, config, resolve, reject) {
   var webpackConfig = require(config.getWebpackConfig(argv[1]));
   var compiler = webpack(webpackConfig);
   compiler.run(function(err, stats) {
+    
+    if (err) {
+      reject(err);
+      return;
+    }
 
     var options = {
       colors: true
