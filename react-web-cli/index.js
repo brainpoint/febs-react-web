@@ -401,8 +401,7 @@ function installReactNative(projectName, version, cb) {
   var proc = spawn('react-native', [
     'init',
     projectName,
-    (version ? '--version='+version : ''),
-    '--verbose'
+    (version ? '--version='+version : '')
   ], {stdio: 'inherit'});
 
   proc.on('close', function (code) {
