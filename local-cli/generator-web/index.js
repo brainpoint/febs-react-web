@@ -9,6 +9,7 @@ var chalk = require('chalk');
 var spawn = require('cross-spawn');
 var easyfile = require('easyfile');
 var packageJson = require('../../package.json');
+var febs        = require('febs');
 
 function installDev(projectDir, verbose, cb) {
   var proc = spawn('npm', [
@@ -66,6 +67,13 @@ module.exports = function(projectDir, config, cb) {
   easyfile.copy(src, dest, {
     force: true,
     backup: true,
+  });
+    
+  // demo
+  src = path.join(__dirname, 'templates/demo/');
+  dest = path.join(root, 'demo/');
+  easyfile.copy(src, dest, {
+    force: true,
   });
 
   process.chdir(root);

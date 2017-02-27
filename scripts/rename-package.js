@@ -47,8 +47,7 @@ function run() {
     var arrFiles = fs.readdirSync(path.join(pa, dirpath));
 
     arrFiles.forEach(function(e) {
-      if (e != 'package.json')
-        arr.push(path.join(pa, dirpath + '/' + e));
+      arr.push(path.join(pa, dirpath + '/' + e));
     });
 
     febs.file.dirAssure(path.join(pa, 'react-web'));

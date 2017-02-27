@@ -63,7 +63,7 @@ var febs   = require('febs');
 
 var os = require('os');
 
-var reactnativeVer = '0.41.0';
+var reactnativeVer = '0.37.0';
 var is_win = (os.platform().indexOf('win') == 0);
 
 /**
@@ -416,27 +416,14 @@ function installReactNative(projectName, version, cb) {
 }
 
 function checkForDependencies(cb) {
-  cb&&cb();
-  return;
-
   console.log('Installing dependencies package from npm...');
-  febs.utils.denodeify(checkForDependenciesPkg)('babel-core', REACT_WEB_PACKAGE_JSON_PATH(), true)
-  .then(()=>{
-    var pathroot = path.resolve(
-      process.cwd(),
-      'node_modules',
-      'babel-core',
-      'package.json'
-    );
-    return checkForDependenciesPkg('babel-register', pathroot, true);
-  })
-  .then(()=>{
-    return checkForDependenciesPkg('core-js', null, true);
-  })
-  .then(()=>{
-    cb&&cb();
-  })
-  .catch(err=>{});
+  checkForDependenciesPkgVer('react', '15.3.2', false, function(){
+    checkForDependenciesPkgVer('react-dom', '15.3.2', false, function(){
+      checkForDependenciesPkgVer('febs-react-component', null, false, function(){
+        cb && cb();
+      });
+    });
+  });
 }
 
 function checkForDependenciesPkg(pkgName, jsonFile, verbose, cb) {
@@ -444,8 +431,27 @@ function checkForDependenciesPkg(pkgName, jsonFile, verbose, cb) {
   var proc = spawn('npm', [
     'install',
     verbose? '--verbose': '',
-    '--save',
     pkgName+ (jsonFile? '@' + require(jsonFile).dependencies[pkgName] : ''),
+  ], {stdio: 'inherit'});
+
+  proc.on('close', function (code) {
+    if (code !== 0) {
+      console.error('`npm install`' + pkgName + ' failed');
+      cb&&cb(code);
+    } else {
+      cb&&cb(code);
+    }
+  });
+}
+
+
+function checkForDependenciesPkgVer(pkgName, version, verbose, cb) {
+  console.log('Installing ' + pkgName.info + ' from npm...');
+  var proc = spawn('npm', [
+    'install',
+    verbose? '--verbose': '',
+    '--save',
+    pkgName+ (version? '@' + version : ''),
   ], {stdio: 'inherit'});
 
   proc.on('close', function (code) {
