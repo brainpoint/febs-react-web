@@ -407,7 +407,7 @@ function installReactNative(projectName, version, cb) {
   proc.on('close', function (code) {
     if (code !== 0) {
       console.error('install react-native' + (version?'@'+version:'') + ' failed');
-      console.error(e);
+      console.error(code);
       process.exit(1);
     } else {
       cb&&cb(code);
