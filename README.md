@@ -1,5 +1,8 @@
 # Febs React Web
 
+[![NPM](https://nodei.co/npm/febs-react-web.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/febs-react-web/)
+
+
 > A framework for building web apps with React Native compatible API.
 
 > 在 [React-web@0.3.2](http://github.com/taobaofed/react-web) 的基础上编写.
