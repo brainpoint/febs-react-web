@@ -139,3 +139,7 @@
     - add method: select
 * window.requestAnimationFrame
 * window.cancelAnimationFrame
+
+### Api of components
+
+  [febs-react-component](https://github.com/brainpoint/febs-react-component/wiki)
