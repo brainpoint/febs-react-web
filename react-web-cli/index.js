@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 /**
  * Copyright (c) 2015-present, Alibaba Group Holding Limited.
  * All rights reserved.
@@ -97,9 +96,12 @@ var REACT_WEB_PACKAGE_JSON_PATH = function() {
 };
 
 console.log('');
-console.log('-------------------------------------------------------'.info);
-console.log('*               Create Febs Web Project               *'.info);
-console.log('-------------------------------------------------------'.info);
+console.log('-----------------------------------------------------------------'.info);
+console.log('*               Create Febs Web Project                         *'.info);
+console.log('*     - If occurs the Permission error, solved by follow:       *'.info);
+console.log('*             1. '.info + 'sudo'.prompt + ' febs-react-web init dirname               *'.info);
+console.log('*          or 2. '.info + 'chown -R -v username dirname'.prompt + '                   *'.info);
+console.log('-----------------------------------------------------------------'.info);
 console.log('');
 
 checkForVersionArgument();
@@ -224,15 +226,19 @@ function installRNCliConfirmation(cb) {
   prompt.get(property, function (err, result) {
     if (result.rncli[0] === 'n') {
       console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
-      var cmd = is_win ? 'npm install -g yarn react-native-cli' : 'npm install -g react-native-cli';
-
-      exec(cmd, function(e, stdout, stderr) {
-        if (e) {
+     
+      var proc = spawn('npm', [
+        'install', 
+        '--g', 
+        (is_win ? 'yarn' : ''), 
+        'react-native-cli'
+        ], {stdio: 'inherit'});
+      proc.on('close', function (code) {
+        if (code !== 0) {
           console.error('install react-native-cli failed');
-          console.error(e);
+          console.error(code);
           process.exit(1);
         }
-        
         cb && cb();
       });
     } else {
