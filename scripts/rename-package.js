@@ -44,35 +44,15 @@ function run() {
     // brower.
     var arr = [];
     var dirpath = 'febs-react-web';
-    var arrFiles = fs.readdirSync(path.join(pa, dirpath));
-
-    arrFiles.forEach(function(e) {
-      arr.push(path.join(pa, dirpath + '/' + e));
-    });
-
     febs.file.dirAssure(path.join(pa, 'react-web'));
 
-    co(function*(){
-      for (var i = 0; i < arr.length; i++) {
-        try {
-          var pp = febs.string.replace(arr[i], 'febs-react-web', 'react-web');
-          if (febs.file.dirIsExist(arr[i])) {
-            //febs.file.dirAssure(pp);
-            febs.file.dirAssure(pp);
-            dirpath = arr[i];
-            arrFiles = fs.readdirSync(dirpath);
-            arrFiles.forEach(function(e) {
-              arr.push(path.join(dirpath , e));
-            });
-          } else {
-            yield febs.utils.denodeify(febs.file.fileCopy)(arr[i], pp);
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      console.log('copy dir ok');
-    });
+    febs.utils.denodeify(febs.file.dirCopy)(path.join(pa, 'febs-react-web'), path.join(pa, 'react-web'))
+      .then(function(){
+        console.log('copy dir ok');
+      })
+      .catch(function(err){
+        console.error('copy dir err: ' + err.toString());
+      });
 
   } else {
     console.log('run cli in error directory!');
