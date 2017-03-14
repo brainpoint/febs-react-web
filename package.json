@@ -1,6 +1,6 @@
 {
   "name": "febs-react-web",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A framework for building web apps with React",
   "license": "BSD-3-Clause",
   "homepage": "https://github.com/brainpoint/febs-react-web#readme",
@@ -66,8 +66,8 @@
     "immutable": "3.7.6",
     "object-assign": "3.0.0",
     "promise": "^7.0.4",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
     "react-mixin": "3.0.3",
     "react-timer-mixin": "0.13.2",
     "rebound": "0.0.13",

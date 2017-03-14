@@ -62,7 +62,7 @@ var febs   = require('febs');
 
 var os = require('os');
 
-var reactnativeVer = '0.37.0';
+var reactnativeVer = '0.42.0';
 var is_win = (os.platform().indexOf('win') == 0);
 
 /**
@@ -422,14 +422,15 @@ function installReactNative(projectName, version, cb) {
 }
 
 function checkForDependencies(cb) {
-  console.log('Installing dependencies package from npm...');
-  checkForDependenciesPkgVer('react', '15.3.2', false, function(){
-    checkForDependenciesPkgVer('react-dom', '15.3.2', false, function(){
-      checkForDependenciesPkgVer('febs-react-component', null, false, function(){
-        cb && cb();
-      });
-    });
-  });
+  cb && cb();
+  // console.log('Installing dependencies package from npm...');
+  // checkForDependenciesPkgVer('react', '15.3.2', false, function(){
+  //   checkForDependenciesPkgVer('react-dom', '15.3.2', false, function(){
+  //     checkForDependenciesPkgVer('febs-react-component', null, false, function(){
+  //       cb && cb();
+  //     });
+  //   });
+  // });
 }
 
 function checkForDependenciesPkg(pkgName, jsonFile, verbose, cb) {

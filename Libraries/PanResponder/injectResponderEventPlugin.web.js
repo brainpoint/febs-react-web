@@ -5,45 +5,42 @@
  */
 'use strict';
 
-import EventPluginRegistry from 'react/lib/EventPluginRegistry';
-import ResponderEventPlugin from 'react/lib/ResponderEventPlugin';
-import EventConstants from 'react/lib/EventConstants';
-import ResponderTouchHistoryStore from 'react/lib/ResponderTouchHistoryStore';
+import EventPluginRegistry from 'react-dom/lib/EventPluginRegistry';
+import ResponderEventPlugin from 'react-dom/lib/ResponderEventPlugin';
+import ResponderTouchHistoryStore from 'react-dom/lib/ResponderTouchHistoryStore';
 
-let topLevelTypes = EventConstants.topLevelTypes;
+const topMouseDown = 'topMouseDown';
+const topMouseMove = 'topMouseMove';
+const topMouseUp = 'topMouseUp';
+const topScroll = 'topScroll';
+const topSelectionChange = 'topSelectionChange';
+const topTouchCancel = 'topTouchCancel';
+const topTouchEnd = 'topTouchEnd';
+const topTouchMove = 'topTouchMove';
+const topTouchStart = 'topTouchStart';
 
 let eventTypes = ResponderEventPlugin.eventTypes;
-eventTypes.startShouldSetResponder.dependencies = [
-  topLevelTypes.topTouchStart,
-];
 
-eventTypes.scrollShouldSetResponder.dependencies = [
-  topLevelTypes.topScroll,
-];
-
-eventTypes.selectionChangeShouldSetResponder.dependencies = [
-  topLevelTypes.topSelectionChange,
-];
-
-eventTypes.moveShouldSetResponder.dependencies = [
-  topLevelTypes.topTouchMove,
-];
+eventTypes.startShouldSetResponder.dependencies           = [ topTouchStart, topMouseDown ];
+eventTypes.scrollShouldSetResponder.dependencies          = [ topScroll ];
+eventTypes.selectionChangeShouldSetResponder.dependencies = [ topSelectionChange ];
+eventTypes.moveShouldSetResponder.dependencies            = [ topTouchMove, topMouseMove ];
 
 ['responderStart', 'responderMove', 'responderEnd', 'responderRelease',
 'responderTerminationRequest', 'responderGrant', 'responderReject', 'responderTerminate'].forEach((type) => {
   let dependencies;
   if ('ontouchstart' in window) {
     dependencies = [
-      topLevelTypes.topTouchStart,
-      topLevelTypes.topTouchCancel,
-      topLevelTypes.topTouchEnd,
-      topLevelTypes.topTouchMove
+      topTouchStart,
+      topTouchCancel,
+      topTouchEnd,
+      topTouchMove
     ];
   } else {
     // TODO: support move event
     dependencies = [
-      topLevelTypes.topMouseDown,
-      topLevelTypes.topMouseUp
+      topMouseDown,
+      topMouseUp
     ];
   }
 
