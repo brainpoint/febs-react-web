@@ -21,15 +21,17 @@ const topTouchStart = 'topTouchStart';
 
 let eventTypes = ResponderEventPlugin.eventTypes;
 
-eventTypes.startShouldSetResponder.dependencies           = [ topTouchStart, topMouseDown ];
+const isDes = ('ontouchstart' in window);
+
+eventTypes.startShouldSetResponder.dependencies           = isDes ? [ topTouchStart ] : [ topMouseDown ];
 eventTypes.scrollShouldSetResponder.dependencies          = [ topScroll ];
 eventTypes.selectionChangeShouldSetResponder.dependencies = [ topSelectionChange ];
-eventTypes.moveShouldSetResponder.dependencies            = [ topTouchMove, topMouseMove ];
+eventTypes.moveShouldSetResponder.dependencies            = isDes ? [ topTouchMove ] : [ topMouseMove ];
 
 ['responderStart', 'responderMove', 'responderEnd', 'responderRelease',
 'responderTerminationRequest', 'responderGrant', 'responderReject', 'responderTerminate'].forEach((type) => {
   let dependencies;
-  if ('ontouchstart' in window) {
+  if (isDes) {
     dependencies = [
       topTouchStart,
       topTouchCancel,
