@@ -229,7 +229,7 @@ function installRNCliConfirmation(cb) {
      
       var proc = spawn('npm', [
         'install', 
-        '--g', 
+        '-g', 
         (is_win ? 'yarn' : ''), 
         'react-native-cli'
         ], {stdio: 'inherit'});
