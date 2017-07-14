@@ -99,8 +99,7 @@ console.log('');
 console.log('-----------------------------------------------------------------'.info);
 console.log('*               Create Febs Web Project                         *'.info);
 console.log('*     - If occurs the Permission error, solved by follow:       *'.info);
-console.log('*             1. '.info + 'sudo'.prompt + ' febs-react-web init dirname               *'.info);
-console.log('*          or 2. '.info + 'chown -R -v username dirname'.prompt + '                   *'.info);
+console.log('*             1. '.info + 'chown -R -v username dirname'.prompt + '                   *'.info);
 console.log('-----------------------------------------------------------------'.info);
 console.log('');
 
@@ -225,22 +224,23 @@ function installRNCliConfirmation(cb) {
 
   prompt.get(property, function (err, result) {
     if (result.rncli[0] === 'n') {
-      console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
+      process.exit(1);
+      // console.log('Installing ' + 'react-native-cli'.info + ' package from npm...');
      
-      var proc = spawn('npm', [
-        'install', 
-        '-g', 
-        (is_win ? 'yarn' : ''), 
-        'react-native-cli'
-        ], {stdio: 'inherit'});
-      proc.on('close', function (code) {
-        if (code !== 0) {
-          console.error('install react-native-cli failed');
-          console.error(code);
-          process.exit(1);
-        }
-        cb && cb();
-      });
+      // var proc = spawn('npm', [
+      //   'install', 
+      //   '-g', 
+      //   (is_win ? 'yarn' : ''), 
+      //   'react-native-cli'
+      //   ], {stdio: 'inherit'});
+      // proc.on('close', function (code) {
+      //   if (code !== 0) {
+      //     console.error('install react-native-cli failed');
+      //     console.error(code);
+      //     process.exit(1);
+      //   }
+      //   cb && cb();
+      // });
     } else {
       cb && cb();
     }

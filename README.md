@@ -9,6 +9,7 @@
 
 ## Create a new project
 
+0. Install `npm install react-native-cli -g`
 1. Install `npm install febs-react-web-cli -g`
 2. Execute `febs-react-web init <ProjectDir>`.
 3. Execute `febs-react-web start` that starts the web dev server
